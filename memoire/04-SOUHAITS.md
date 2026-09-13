@@ -44,7 +44,56 @@ recueillis. Ne rien modifier avant.
 
 ---
 
-## Point 2 — (à venir)
+## Point 2 — Un format de sortie commun à tous les modules
+
+**Dit :** « Il faut qu'on trouve un format de fichier de sortie qui permette de
+maximiser le rendement entre l'équivalent Word, l'équivalent Excel, l'équivalent
+PowerPoint et les futurs équivalents. »
+
+**Ce que je retiens :**
+
+Un seul modèle de données partagé par tous les modules, plutôt que quatre formats
+étanches. C'est le bon réflexe, et c'est structurant : pris trop tard, il oblige à
+tout réécrire.
+
+**Ce que ça apporte concrètement, si le format est vraiment commun :**
+
+- Un tableau créé dans le tableur se colle dans le document texte sans conversion,
+  et reste un tableau vivant.
+- Un titre, une couleur, une police se définissent une fois et valent partout :
+  les styles nommés sont partagés entre modules.
+- Un module nouveau (base de données, formulaire, diagramme) réutilise l'existant
+  au lieu de repartir de zéro.
+- Le code de sérialisation, d'annulation/rétablissement, de recherche et de
+  chiffrement s'écrit **une seule fois** dans le noyau.
+
+**Ambiguïté à lever — trois lectures possibles de « rendement » :**
+
+1. **Mutualisation du code** — un maximum de logique partagée entre modules.
+2. **Compacité du fichier** — le format produit les fichiers les plus légers.
+3. **Fidélité des échanges** — un contenu passe d'un module à l'autre, et vers
+   Word/Excel/PowerPoint, sans rien perdre.
+
+Ces trois objectifs tirent dans des directions différentes et ne se maximisent pas
+ensemble. À arbitrer.
+
+**Pistes techniques relevées, à départager plus tard :**
+
+- **Modèle en blocs universel.** Tout contenu est un bloc typé (paragraphe,
+  cellule, image, tableau, diapositive), avec des propriétés communes et des
+  propriétés propres au type. Un tableau est le même objet, qu'il vive dans un
+  document texte, une feuille de calcul ou une diapositive. C'est la piste la plus
+  prometteuse pour le sens 1 et le sens 3.
+- **Séparation stricte contenu / mise en forme.** Le contenu ne porte que des
+  références à des styles nommés, définis une seule fois dans le document.
+- **Grille partagée.** Le tableur, les tableaux du traitement de texte et la mise
+  en page des diapositives reposent sur le même moteur de grille.
+
+**Point de vigilance :** un format trop universel devient un plus petit
+dénominateur commun, incapable d'exprimer les spécificités de chaque module
+(les formules et le graphe de dépendances du tableur, la pagination du texte).
+Le format devra prévoir des zones propres à chaque module que les autres
+transportent sans les comprendre.
 
 ---
 
