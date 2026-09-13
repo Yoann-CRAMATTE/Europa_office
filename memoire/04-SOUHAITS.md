@@ -1078,4 +1078,79 @@ corrigé.
 
 ---
 
-## Point 15 — (à venir)
+## Point 15 — Le cas réel : réclamation d'un usager pour surconsommation
+
+**Dit :** « Imagine, un usager se plaint parce qu'il a une surconsommation.
+Actuellement j'ai plusieurs Word et plusieurs Excel que je vais remplir pour
+extraire des données, etc. À chaque fois que je crée ce dossier, je vais devoir
+copier des bases à droite et à gauche, des modèles. Là, tu crées un seul et
+unique modèle, et tu pars de celui-ci pour le remplir. »
+
+**Premier cas d'usage réel du projet.** Il vient du service de Yoann et devrait
+servir de banc d'essai : si Europa règle celui-là, il règle la famille entière.
+
+### Ce que le dossier exige aujourd'hui
+
+Plusieurs documents Word, plusieurs classeurs Excel, des données extraites d'un
+système tiers, et des éléments recopiés depuis des bases éparses. À chaque
+nouveau dossier, tout est refait. Chaque recopie est une occasion d'erreur, et
+rien ne garantit que le chiffre du courrier soit celui du tableau.
+
+### Le même dossier, en un seul fichier
+
+Esquisse du modèle « réclamation surconsommation » — à valider avec Yoann :
+
+| Onglet | Type | Contenu |
+|---|---|---|
+| **Dossier** | formulaire → data | identité de l'usager, adresse, numéro d'abonné, numéro de compteur, date et canal de la réclamation |
+| **Relevés** | data | historique des index : date, index, consommation, nature du relevé. Colonnes typées, agrégats en bas |
+| **Analyse** | tableur | consommation constatée, moyenne des années antérieures, écart, franchissement du seuil, calcul du dégrèvement éventuel |
+| **Références** | data, marqué donnée de référence | tarifs, seuils, barème — conservés d'un dossier à l'autre |
+| **Pièces** | PDF | courrier de l'usager, rapport d'intervention, constat de fuite, attestation de réparation |
+| **Réponse** | texte | courrier de décision, dont chaque donnée est une balise et non une recopie |
+
+**Ce que cela change concrètement :**
+
+- le courrier de réponse **ne se remplit plus à la main** : le nom, l'adresse, le
+  numéro d'abonné, la consommation, la moyenne, l'écart et la décision sont des
+  balises pointant sur les onglets de données ;
+- une correction dans les relevés **se propage au courrier**, sans intervention ;
+- les « bases à droite et à gauche » deviennent l'onglet **Références** du point
+  14, préparé une fois dans le modèle ;
+- le dossier entier **s'archive et se transmet comme un seul fichier** : au
+  service juridique, au comptable, ou dans le dossier de l'abonné.
+
+### Ce que ce cas révèle et qui n'était pas encore dit
+
+1. **La règle de calcul appartient au modèle.** L'onglet Analyse porte la règle de
+   dégrèvement applicable. Elle est écrite une fois, dans le modèle, et non
+   reconstituée à chaque dossier. Yoann connaît cette règle ; il faudra la
+   recueillir précisément.
+   *À vérifier avec lui : le dégrèvement pour fuite après compteur relève, sauf
+   erreur de ma part, du dispositif issu de la loi dite Warsmann de 2011, codifié
+   au code général des collectivités territoriales. Je ne peux pas le vérifier
+   depuis cette session et ne l'affirme donc pas : c'est lui qui tranchera.*
+
+2. **Le dossier contient des données personnelles.** Nom, adresse, consommation :
+   ce sont des données nominatives d'usager. Deux conséquences, qui ne sont pas
+   des options dans un service public :
+   - le chiffrement du point 1 prend ici tout son sens et devrait être proposé
+     par défaut sur ce type de modèle ;
+   - le fichier unique **facilite le droit à l'effacement** : effacer le dossier,
+     c'est supprimer un fichier, et non traquer des copies dans quinze endroits.
+
+3. **L'import de données extérieures manque.** Les relevés viennent d'un système
+   de facturation. Les ressaisir à la main annulerait le bénéfice. Il faudra
+   pouvoir **coller ou importer un tableau** — CSV au minimum — dans un onglet
+   `data`, avec correspondance des colonnes. **Ce besoin n'est pas encore dans la
+   liste et doit y entrer.**
+
+### Proposition
+
+Faire de ce dossier le **cas d'essai de référence** du projet. Chaque brique
+construite sera évaluée à une seule question : rapproche-t-elle du moment où
+Yoann traite une réclamation de surconsommation dans un seul fichier ?
+
+---
+
+## Point 16 — (à venir)
