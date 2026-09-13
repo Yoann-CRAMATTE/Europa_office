@@ -1,0 +1,64 @@
+/* Feuille de style du runtime Europa. Compressée dans le fichier final. */
+:root {
+  --eu-fond: #0d1b2e;
+  --eu-surface: #16273e;
+  --eu-texte: #f2f0ea;
+  --eu-accent: #ff9e8a;
+  --eu-discret: #5e7699;
+  --eu-rayon: 10px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--eu-fond); color: var(--eu-texte); }
+
+.eu-cadre { display: flex; flex-direction: column; height: 100vh; }
+
+.eu-barre {
+  display: flex; gap: 12px; align-items: center;
+  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.eu-titre {
+  flex: 1; min-width: 0; background: transparent; border: 0;
+  color: inherit; font: 600 17px/1.4 inherit; padding: 6px 8px;
+  border-radius: var(--eu-rayon);
+}
+.eu-titre:focus { outline: 2px solid var(--eu-accent); }
+
+.eu-bouton {
+  background: var(--eu-accent); color: #16273e; border: 0;
+  padding: 8px 16px; border-radius: var(--eu-rayon);
+  font: 600 14px/1 inherit; cursor: pointer;
+}
+.eu-bouton:hover { filter: brightness(1.08); }
+.eu-bouton:disabled { opacity: .5; cursor: default; }
+
+.eu-zone {
+  flex: 1; width: 100%; resize: none; border: 0; padding: 24px;
+  background: transparent; color: inherit;
+  font: 15px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.eu-zone:focus { outline: 0; }
+
+/* Porte de déverrouillage */
+.eu-porte {
+  position: fixed; inset: 0; z-index: 9999;
+  display: grid; place-content: center;
+  background: var(--eu-fond);
+}
+.eu-porte-carte {
+  width: min(380px, 90vw); text-align: center;
+  background: var(--eu-surface); padding: 32px; border-radius: 16px;
+}
+.eu-porte-cadenas { font-size: 34px; }
+.eu-porte-carte h1 { font-size: 18px; margin: 12px 0 4px; }
+.eu-porte-carte p { margin: 0 0 18px; color: var(--eu-discret); font-size: 14px; }
+.eu-porte-carte input {
+  width: 100%; padding: 10px 12px; margin-bottom: 10px;
+  border-radius: var(--eu-rayon); border: 1px solid rgba(255,255,255,.15);
+  background: rgba(0,0,0,.25); color: inherit; font: 15px/1.4 inherit;
+}
+.eu-porte-carte button { width: 100%; }
+.eu-porte-erreur { color: var(--eu-accent); font-size: 13px; min-height: 18px; margin-top: 10px; }
+
+@media (max-width: 600px) {
+  .eu-zone { padding: 16px; }
+}

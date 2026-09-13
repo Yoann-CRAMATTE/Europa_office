@@ -1,0 +1,23 @@
+{
+  "name": "europa-office",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Suite bureautique autonome : chaque document est un fichier HTML unique, hors-ligne, sans serveur.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:noyau": "esbuild noyau/src/index.ts --bundle --format=esm --minify --outfile=dist/noyau.js",
+    "pack": "node outils/empaqueter.mjs",
+    "demo": "npm run build:noyau && node outils/empaqueter.mjs --runtime dist/noyau.js --css noyau/src/base.css --sortie dist/demo.europa.html --titre \"Note de démonstration\" --module notes",
+    "test": "npm run demo && node tests/fumee.mjs && node tests/chiffrement.mjs && node tests/module-absent.mjs",
+    "verifier": "npx tsc --noEmit && npm test"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "playwright": "^1.56.1",
+    "typescript": "^5.7.0"
+  }
+}
