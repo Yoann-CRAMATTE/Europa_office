@@ -1153,4 +1153,49 @@ Yoann traite une réclamation de surconsommation dans un seul fichier ?
 
 ---
 
-## Point 16 — (à venir)
+## Point 16 — Import CSV, validé
+
+**Dit :** « Ok pour l'import CSV. »
+
+**Acté.** Un onglet `data` peut être alimenté depuis un fichier CSV, avec
+correspondance entre les colonnes du fichier et celles de la table.
+
+### Les pièges à traiter, qui font échouer la plupart des imports en France
+
+Ce ne sont pas des détails : ce sont les raisons habituelles pour lesquelles un
+import CSV se solde par des accents cassés et des montants illisibles.
+
+| Piège | Ce qui se passe | Traitement |
+|---|---|---|
+| **Séparateur** | Excel en français écrit des `;`, pas des `,` — la virgule étant déjà le séparateur décimal | détecter le séparateur sur les premières lignes, laisser le corriger |
+| **Encodage** | les exports de logiciels métier sont souvent en Windows-1252, pas en UTF-8 : les accents deviennent illisibles | détecter l'encodage, proposer le choix, montrer un aperçu avant de valider |
+| **Marque d'ordre des octets** | Excel ne reconnaît l'UTF-8 que si le fichier commence par cette marque | l'accepter en entrée, l'écrire en sortie |
+| **Nombres** | `1 234,56` avec espace insécable et virgule décimale | convertir selon le format français, et non selon le format anglo-saxon |
+| **Dates** | `12/04/1990` se lit jour/mois/année ici, mois/jour/année ailleurs | imposer le format français, signaler les valeurs ambiguës |
+| **Champs sur plusieurs lignes** | une adresse entre guillemets contenant un retour à la ligne | analyseur conforme à la norme RFC 4180, pas un simple découpage |
+
+### Ce que l'import doit faire, au-delà de lire le fichier
+
+1. **Montrer un aperçu** des premières lignes avant de valider quoi que ce soit.
+2. **Proposer la correspondance des colonnes** — celles du fichier vers celles de
+   la table — et la laisser corriger.
+3. **Vérifier chaque valeur contre le type de la colonne** avant insertion, et
+   présenter les refus en clair : ligne, colonne, valeur, raison. Jamais
+   d'insertion silencieuse d'une valeur douteuse.
+4. **Laisser choisir** entre ajouter les lignes et remplacer le contenu existant.
+
+### Extension naturelle, à envisager plus tard
+
+Lire directement un fichier Excel `.xlsx` éviterait l'étape d'export en CSV et
+tous les pièges ci-dessus d'un coup, puisque les types y sont déjà portés par le
+fichier.
+
+Le coût en est plus faible qu'il n'y paraît : un `.xlsx` est une archive ZIP
+contenant du XML. Or **le décodeur ZIP sera déjà écrit** pour le format `.eo` du
+point 12.3. La même brique servirait deux fois.
+
+À proposer une fois le CSV en place.
+
+---
+
+## Point 17 — (à venir)
