@@ -285,4 +285,75 @@ classeur entier, ou peut-on chiffrer un onglet en particulier ?
 
 ---
 
-## Point 5 — (à venir)
+## Point 5 — Images converties en SVG
+
+**Dit :** « Pour toute image importée, par exemple dans un Word, je veux que
+celle-ci soit automatiquement transformée en SVG. Comme ça on ne stocke pas une
+image dans le rendu de sortie mais bien du code, et après on ajuste avec un
+coefficient de grossissement et la position de l'image dans le document. »
+
+**L'objectif est juste. Le moyen ne marche pas pour toutes les images.**
+
+### Ce qui ne tient pas
+
+SVG est un format **vectoriel** : des formes décrites mathématiquement. Une photo
+est une image **matricielle** : une grille de pixels. Il n'existe aucune
+conversion fidèle de l'une vers l'autre.
+
+Deux façons de « mettre une photo en SVG », et aucune ne donne ce qui est
+recherché :
+
+1. **Envelopper le bitmap** — `<svg><image href="data:image/jpeg;base64,…"/></svg>`.
+   C'est un SVG, mais il contient toujours la photo entière. Zéro gain de poids,
+   et le grossissement reste flou. Emballage, pas conversion.
+2. **Vectoriser réellement** (Potrace, ImageTracer) — l'algorithme redessine
+   l'image en tracés. Sur une photographie, cela produit soit une bouillie
+   méconnaissable, soit des dizaines de milliers de tracés : le SVG devient
+   **plus lourd que la photo d'origine**, couramment de cinq à cinquante fois.
+   C'est l'inverse de l'effet recherché.
+
+**Et le bénéfice visé n'a pas besoin du SVG.** Coefficient d'agrandissement et
+position sont des propriétés du document, pas du format d'image. Une image
+matricielle les porte déjà. Le seul avantage réel du vectoriel est la netteté à
+n'importe quelle échelle, et à l'impression.
+
+### Ce que je propose à la place — conversion conditionnelle
+
+Le bon réflexe est de regarder **ce qu'est l'image** avant de décider :
+
+| Nature de l'image | Traitement | Ce qu'on y gagne |
+|---|---|---|
+| Logo, dessin au trait, schéma, icône, capture d'écran à aplats | **vectorisation en SVG** | plus léger *et* net à toute échelle — le souhait est pleinement atteint |
+| Photographie, dégradé, texture | **conservée en matriciel**, recompressée en WebP ou AVIF et redimensionnée à la taille d'affichage utile | souvent cinq à dix fois plus léger que l'original, sans perte visible |
+
+La détection peut être automatique : nombre de couleurs distinctes, proportion de
+zones uniformes, netteté des contours. Ces indicateurs séparent très bien un logo
+d'une photo. En cas de doute, proposer le choix à l'utilisateur avec un aperçu
+des deux résultats et leurs poids respectifs.
+
+**Dans les deux cas, le document manipule le même objet** : une ressource, un
+coefficient d'échelle, une position. Le module ne sait pas, et n'a pas besoin de
+savoir, si la ressource est vectorielle ou matricielle. Le souhait de Yoann est
+donc tenu du point de vue de l'usage.
+
+### Risque de sécurité à ne pas manquer
+
+Un fichier SVG peut contenir du JavaScript (`<script>`, attributs `onload`,
+`href` en `javascript:`). Importer un SVG venu de l'extérieur dans un document
+ouvrirait exactement la faille écartée au point 2 bis en refusant le format JS.
+
+**Règle à poser :** tout SVG entrant est assaini avant d'être stocké — scripts,
+gestionnaires d'événements et références externes retirés. Un SVG produit par
+notre propre vectorisation est sûr par construction ; un SVG importé ne l'est
+jamais.
+
+### À faire avant de trancher
+
+Mesurer sur des cas réels : un logo, un organigramme, une capture d'écran, une
+photo. Comparer poids d'origine, poids vectorisé, poids recompressé, et rendu
+visuel. Trois chiffres et quatre images trancheront le débat mieux que ce texte.
+**À faire quand la liste des points sera close.**
+
+---
+
+## Point 6 — (à venir)
