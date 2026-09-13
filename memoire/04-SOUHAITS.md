@@ -1274,4 +1274,63 @@ choisies à l'œil.
 
 ---
 
-## Point 18 — (à venir)
+## Point 18 — Une icône par type, sur l'onglet et dans la barre d'outils
+
+**Dit :** « Tu as raison. Je propose une petite icône sur l'onglet tout en bas,
+comme ça on voit le type d'onglet que c'est, et on peut répéter ces icônes dans la
+barre d'outils. »
+
+**Acté.** Cela répond directement à la réserve du point 17 : le type ne se lit plus
+à la couleur seule.
+
+### Deux précisions qu'apporte ce point
+
+1. **La barre d'onglets est en bas**, comme les feuilles d'Excel. C'était supposé
+   depuis le point 4, c'est maintenant explicite.
+2. **Chaque onglet porte trois signaux** : sa couleur, son icône, son nom. Aucun
+   n'est indispensable aux deux autres.
+
+### Le principe à en tirer : une icône, un type, partout
+
+La proposition de répéter les icônes dans la barre d'outils vaut mieux qu'une
+commodité d'affichage : c'est ce qui fait qu'on apprend le vocabulaire **une seule
+fois**. Le même symbole doit donc apparaître :
+
+- sur l'onglet, en bas ;
+- dans le menu du bouton `+`, au moment de choisir le type ;
+- dans le ruban, sur les outils propres au module ;
+- dans les listes de choix d'une référence entre onglets ;
+- dans les messages, quand il faut désigner un onglet.
+
+### Esquisse des icônes — à dessiner plus tard
+
+| Type | Motif proposé |
+|---|---|
+| **texte** | une page avec des lignes de texte |
+| **tableur** | une grille de cases uniformes |
+| **data** | une table avec sa ligne d'en-tête pleine et sa ligne de total soulignée |
+| **diapos** | un écran large avec un bandeau de titre |
+| **formulaire** | un champ de saisie et une case à cocher |
+| **PDF** | une page au coin corné |
+
+**Le point délicat est le couple tableur / data.** Ce sont les deux plus proches
+visuellement, et ce sont justement ceux que Yoann tient à distinguer depuis le
+point 7. D'où le motif proposé : la grille nue pour le tableur, la table à en-tête
+et total pour data — l'icône raconte alors la structure imposée, et pas seulement
+« un tableau ».
+
+### Contraintes de dessin à respecter
+
+- **Lisibles à seize pixels.** Dans un onglet de barre basse, il n'y a pas de place
+  pour du détail : des silhouettes simples, peu de traits.
+- **Lisibles en monochrome.** Un onglet inactif est atténué ; l'icône doit rester
+  reconnaissable sans sa couleur.
+- **Dessinées en SVG, à un seul trait d'épaisseur**, pour rester nettes sur tout
+  écran et peser quelques centaines d'octets.
+
+**À proposer quand la liste sera close :** une planche des six icônes, à valider
+avant d'écrire la moindre ligne d'interface.
+
+---
+
+## Point 19 — (à venir)
