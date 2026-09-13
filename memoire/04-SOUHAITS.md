@@ -95,6 +95,50 @@ dénominateur commun, incapable d'exprimer les spécificités de chaque module
 Le format devra prévoir des zones propres à chaque module que les autres
 transportent sans les comprendre.
 
+### Point 2 bis — Format JSON, extension `.eo`
+
+**Dit :** « Toujours dans le point deux, le format pourrait être de type JS ou
+JSON, mais avec une extension de type `.eo`. »
+
+**Ce que je retiens :** JSON pour la structure, `.eo` pour l'extension
+(Europa Office).
+
+**JSON plutôt que JS — tranché, et c'est important.**
+JSON est de la donnée inerte. Un fichier `.js` est du **code exécutable** : un
+document reçu par courriel pourrait alors exécuter n'importe quoi à l'ouverture.
+Ce serait la faille de sécurité majeure du projet. JSON, et rien d'autre.
+Le format actuel (`application/europa+json`) est déjà conforme.
+
+**Conflit réel entre l'extension `.eo` et le point 1 :**
+
+Le point 1 veut un fichier qu'on ouvre par double-clic, sans rien installer.
+Or un fichier nommé `budget.eo` n'est associé à aucun logiciel : au double-clic,
+le système demande « avec quoi ouvrir ? » et le navigateur peut refuser de
+l'interpréter comme du HTML. L'extension `.html` est ce qui rend le double-clic
+possible. Les deux souhaits ne tiennent pas ensemble tels quels.
+
+**Trois sorties possibles, à arbitrer :**
+
+| Option | Ce qu'on gagne | Ce qu'on perd |
+|---|---|---|
+| **`budget.eo.html`** — double extension | double-clic conservé, identité `.eo` visible dans le nom | l'extension réelle reste `.html` |
+| **`.eo` pur** | identité propre et nette | exige une association système, donc une installation : contredit le point 1 |
+| **`.eo` = document seul, sans moteur** | fichier minuscule (quelques Ko), idéal pour archiver, échanger, versionner | nécessite l'application pour être ouvert |
+
+**Piste recommandée : les deux formats, chacun son rôle.**
+
+- `.eo.html` — le document complet et autonome, celui qu'on envoie et qu'on
+  double-clique. C'est le format de tous les jours.
+- `.eo` — le document nu en JSON, sans le moteur. Sert à l'archivage longue durée,
+  à l'échange entre systèmes, au suivi de version, et à l'édition par un outil
+  tiers ou un agent. L'application sait ouvrir et produire les deux.
+
+Un même contenu, deux emballages. Le JSON à l'intérieur est strictement identique :
+un `.eo.html` privé de son moteur redonne exactement le `.eo`.
+
+**À confirmer par Yoann plus tard :** cette piste te convient-elle, ou tiens-tu à
+`.eo` comme extension unique ?
+
 ---
 
 ## Point 3 — (à venir)
