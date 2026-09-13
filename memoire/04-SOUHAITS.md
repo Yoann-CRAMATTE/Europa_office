@@ -1198,4 +1198,80 @@ point 12.3. La même brique servirait deux fois.
 
 ---
 
-## Point 17 — (à venir)
+## Point 17 — Une seule identité visuelle, un ruban contextuel, une couleur par type
+
+**Dit :** « Je veux le même visuel sur l'ensemble de l'application. C'est juste
+que, par exemple, les onglets du ruban ou le ruban change en fonction du module
+sélectionné, type table ou type texte ou autre. Et on pourrait dire par exemple
+que quand tu crées un onglet type tableur, le pourtour devient vert ; type Word,
+bleu ; type PowerPoint, rouge ; type data, violet, etc. »
+
+### 17.1 — Le visuel ne bouge pas, le ruban change
+
+Confirme le point 13 : **une seule interface**. Même ossature, mêmes composants,
+même charte, d'un bout à l'autre. Ce qui change d'un onglet à l'autre :
+
+- **le contenu du ruban** — les outils du module actif, et eux seuls ;
+- **la couleur d'accent** — celle du type d'onglet en cours.
+
+Le cadre, lui, ne bouge jamais. L'utilisateur ne réapprend rien en changeant
+d'onglet : il retrouve ses repères et voit seulement d'autres outils dedans.
+
+### 17.2 — Le ruban : nuance par rapport au point 3
+
+Bento n'a pas de ruban, mais une barre d'outils unique. Yoann demande un **ruban
+contextuel**, plus proche d'Office : des outils groupés, et un contenu qui suit le
+module actif.
+
+C'est un choix défendable — le ruban tient plus d'outils sans les enfouir dans des
+menus, et c'est ce que connaissent les utilisateurs venant d'Office. Il coûte en
+revanche de la hauteur d'écran.
+
+**Position proposée :** un ruban compact, repliable, d'une seule rangée de
+groupes. Le panneau de propriétés contextuel du point 3 est conservé : le ruban
+porte les **actions** (insérer, mettre en forme, calculer), le panneau porte les
+**réglages de ce qui est sélectionné**. Deux rôles distincts, aucun doublon.
+
+### 17.3 — Le code couleur par type d'onglet
+
+Bonne idée, et le choix des teintes est malin : il reprend les repères d'Office,
+donc il se comprend sans explication.
+
+Proposition de palette, à valider :
+
+| Type d'onglet | Couleur | Remarque |
+|---|---|---|
+| **texte** | bleu | repère Word |
+| **tableur** | vert | repère Excel |
+| **diapos** | orange | repère PowerPoint |
+| **data** | violet | demandé par Yoann |
+| **formulaire** | turquoise | à choisir |
+| **PDF** | framboise | le rouge franc étant trop proche de l'orange des diapos |
+
+**Où la couleur s'applique :** l'onglet lui-même dans la barre, le pourtour de la
+zone d'édition, et les éléments actifs du ruban. Pas en aplat plein.
+
+### Deux réserves, à traiter dès la conception
+
+**1. La couleur ne doit jamais être le seul signal.** Environ un homme sur douze
+distingue mal le rouge du vert. Or ce sont précisément les deux teintes retenues
+pour le tableur et les diapos. Dans un outil destiné à un service public, ce n'est
+pas un détail de confort.
+
+→ Chaque type porte **une couleur, une icône et un libellé**. Qui ne voit pas la
+couleur lit le nom ; qui ne lit pas voit la forme. La couleur accélère la
+reconnaissance, elle ne la porte jamais seule.
+
+**2. Six couleurs vives à l'écran donnent une interface criarde.** À doser : la
+couleur pleine pour l'onglet actif seulement, les autres en teinte atténuée. Une
+seule couleur franche à la fois, le reste en gris neutre.
+
+### À vérifier au moment de fixer la palette
+
+Chaque couleur doit rester lisible sur fond clair comme sur fond sombre, avec un
+contraste suffisant pour du texte. Les valeurs exactes seront mesurées, pas
+choisies à l'œil.
+
+---
+
+## Point 18 — (à venir)
