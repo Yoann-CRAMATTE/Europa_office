@@ -721,4 +721,61 @@ fois.
 
 ---
 
-## Point 10 — (à venir)
+## Point 10 — Le PDF n'est pas un onglet, c'est une sortie
+
+**Dit :** « Je précise : le PDF, c'est pour pouvoir générer un PDF. Mais je ne
+vois pas si c'est encore utile du coup, avec le formulaire. Parce que si on
+voulait faire un PDF formulaire unique à envoyer, on va le faire à partir de
+l'équivalent Word. »
+
+**Tu as raison, et c'est un allègement réel. Le point 8 est révisé.**
+
+PDF n'est pas une nature de document, c'est un **format de sortie**. En faire un
+type d'onglet était une erreur d'analyse de ma part au point 4 : cela obligeait à
+concevoir un éditeur de PDF, alors qu'il ne s'agit que d'imprimer ce qui existe
+déjà ailleurs.
+
+### Ce qui remplace l'onglet PDF
+
+**Une action d'export, disponible depuis n'importe quel onglet.** Pas un type,
+une fonction transversale du noyau :
+
+| Depuis | Produit |
+|---|---|
+| texte | le document mis en page |
+| tableur / data | le tableau, avec ses en-têtes et sa ligne de total |
+| diapos | les diapositives, ou le support avec les notes |
+| **formulaire** | **un PDF à champs remplissables** |
+
+Le dernier cas est le seul qui demande le mécanisme interactif du point 8. Et il
+est simple à produire : un onglet formulaire porte déjà des champs typés et
+nommés — les transposer en champs PDF est direct, il n'y a rien à inventer.
+
+### Ce qu'on y gagne
+
+- **un type d'onglet en moins** à concevoir, écrire et expliquer ;
+- **le générateur PDF écrit une seule fois**, au lieu d'un éditeur PDF entier ;
+- **une règle simple à retenir** : on ne crée jamais un PDF, on exporte en PDF ;
+- **le poids du module PDF retombe** : produire un PDF est bien plus léger que
+  d'en afficher et d'en éditer un.
+
+### Le seul cas où le PDF garde une valeur propre
+
+Quand le destinataire **n'ouvrira pas le fichier Europa** : un usager, une
+administration, une pièce à archiver, un contexte où seul un PDF est accepté.
+Il remplit alors le formulaire dans son propre lecteur, sans rien installer.
+
+C'est précisément le rôle laissé au PDF, et il suffit. La boucle complète
+— envoi, remplissage, retour, dépouillement — passe par l'onglet formulaire du
+point 9 ; le PDF reste la porte de sortie vers l'extérieur.
+
+### Conséquence sur la liste des types d'onglets
+
+L'onglet PDF est retiré. Les types retenus à ce stade :
+**texte · tableur · data · diapos · formulaire**.
+
+Une synthèse consolidée sera dressée quand la liste des points sera close.
+
+---
+
+## Point 11 — (à venir)
