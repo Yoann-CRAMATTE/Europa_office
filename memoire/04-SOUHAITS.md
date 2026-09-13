@@ -846,4 +846,95 @@ mais la limite où le regroupement se retourne contre son but.
 
 ---
 
-## Point 12 — (à venir)
+## Point 12 — Éditeur PDF par surimpression, et question du conteneur ZIP
+
+**Dit :** « L'idée d'avoir un onglet PDF, c'est pouvoir apporter des PDF dans
+notre fichier, et donc notre bloc en lui-même est l'éditeur PDF. En gros, c'est
+pouvoir mettre du texte sur un PDF et le réexporter en PDF, ou l'enregistrer dans
+le fichier `.eo`. Alors peut-être qu'il faudra penser qu'on change le format du
+fichier : au lieu d'avoir du JavaScript ou du JSON, on aurait un ZIP avec à
+l'intérieur tous les éléments. »
+
+### 12.1 — L'onglet PDF devient un éditeur par surimpression
+
+C'est le bon niveau d'ambition, et c'est réalisable — parce que **poser du texte
+sur un PDF ne demande pas de le comprendre**.
+
+Le mécanisme : le PDF importé reste intact ; on ajoute par-dessus une couche
+d'éléments propres à Europa (blocs de texte, traits, images, tampons), chacun avec
+sa page et ses coordonnées. À l'export, ces éléments sont écrits dans le PDF en
+mise à jour incrémentale — la technique même dont se servent les annotations et
+les signatures. Le PDF d'origine n'est jamais réécrit.
+
+Usages immédiats : remplir un formulaire reçu en PDF, apposer une mention ou un
+tampon sur un document officiel, annoter un cahier des charges.
+
+**La difficulté n'est pas l'écriture, c'est l'affichage.** Pour poser un texte au
+bon endroit, il faut voir la page et connaître ses coordonnées au point près. Le
+lecteur du navigateur évoqué au point 11 ne le permet pas : il affiche, mais ne
+dit rien de ce qu'il affiche et n'accepte aucune surcouche précise.
+
+→ **Un moteur de rendu embarqué (PDF.js, environ 1 Mo) devient donc nécessaire.**
+Au vu du point 11.3, ce poids est acceptable. C'est néanmoins le plus gros poste
+du projet et il doit être assumé comme tel.
+
+**Ce qui n'est pas demandé, et qu'il ne faut pas supposer :** modifier le texte
+existant du PDF, en changer la mise en page, en extraire le contenu. On écrit
+par-dessus, on ne touche pas au-dessous.
+
+### 12.2 — Le conteneur : l'intuition est juste, la conclusion est à corriger
+
+**Le problème que Yoann soulève est réel.** Mettre un PDF de cinq mégaoctets dans
+le JSON du document pose trois difficultés :
+
+1. l'encodage en base64 ajoute environ un tiers de poids ;
+2. le JSON entier doit être lu en une fois à l'ouverture, même pour afficher un
+   onglet texte de deux pages ;
+3. lire une chaîne de sept mégaoctets d'un bloc provoque un pic de mémoire.
+
+**Mais passer à un ZIP détruirait le point 1.** Un fichier ZIP ne s'ouvre pas
+dans un navigateur par double-clic : il s'ouvre dans le gestionnaire d'archives.
+Tout le principe du projet — le fichier *est* le logiciel — disparaîtrait.
+
+**Réponse proposée : séparer les ressources sans quitter le HTML.**
+
+Aujourd'hui, tout vit dans un seul bloc JSON. Demain, un bloc par ressource :
+
+```html
+<script type="application/europa+json" id="europa-doc">…</script>
+<script type="europa/res" id="res-a1b2" data-mime="application/pdf">JVBERi0…</script>
+<script type="europa/res" id="res-c3d4" data-mime="image/webp">UklGRi…</script>
+```
+
+Le document JSON ne retient qu'une référence : `{ "ressource": "res-a1b2" }`.
+Ce qu'on y gagne :
+
+- le JSON redevient petit et se lit instantanément, quel que soit le poids des
+  pièces jointes ;
+- **chaque ressource n'est lue que lorsque son onglet s'ouvre** — un classeur
+  contenant six PDF s'ouvre aussi vite qu'un classeur vide ;
+- une ressource se retire ou se remplace sans toucher au reste ;
+- le fichier demeure un HTML que l'on double-clique.
+
+C'est la structure d'un ZIP — un index et des entrées indépendantes — mais dans
+un fichier qui reste ouvrable.
+
+### 12.3 — En revanche, le ZIP trouve sa place pour le `.eo`
+
+L'intuition de Yoann n'est pas perdue : elle s'applique parfaitement à **l'autre
+format**, celui du point 2 bis.
+
+| Format | Nature | Rôle |
+|---|---|---|
+| **`.eo.html`** | HTML autonome, document + ressources en blocs séparés | le fichier de tous les jours, qu'on ouvre et qu'on envoie |
+| **`.eo`** | **archive ZIP** : le JSON du document et les ressources en fichiers distincts | archivage, échange, suivi de version, traitement par un outil tiers |
+
+C'est exactement la construction d'un `.docx` ou d'un `.odt`, qui sont des ZIP.
+Et le passage d'un format à l'autre est direct : mêmes données, deux emballages.
+
+Avantage supplémentaire du ZIP pour le `.eo` : les ressources y sont stockées en
+binaire, sans le tiers de poids ajouté par le base64.
+
+---
+
+## Point 13 — (à venir)
