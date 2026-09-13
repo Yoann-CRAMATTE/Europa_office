@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Europa Office — maquette d'interface</title>
+<style>
+  :root{
+    --fond:#F2F1EC; --surface:#FFFFFF; --bord:#DEDCD4; --bord-fort:#C8C5BA;
+    --texte:#1B222B; --texte-doux:#5F6975; --texte-faible:#8B939D;
+    --rayon:7px; --ombre:0 1px 2px rgba(27,34,43,.06),0 4px 14px rgba(27,34,43,.05);
+    --accent:#2563A8;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--fond);color:var(--texte);
+    font:13.5px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  svg{display:block}
+  button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+
+  .app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+  /* ---------- barre supérieure ---------- */
+  .chapeau{display:flex;align-items:center;gap:14px;padding:0 14px;height:46px;
+    background:var(--surface);border-bottom:1px solid var(--bord);flex:none}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:640;letter-spacing:-.01em}
+  .logo-pastille{width:22px;height:22px;border-radius:6px;background:#16273E;
+    display:grid;place-content:center}
+  .logo em{font-style:normal;color:var(--texte-faible);font-weight:500}
+  .fichier{display:flex;align-items:center;gap:7px;padding:4px 10px;border-radius:var(--rayon);
+    background:var(--fond);border:1px solid var(--bord);font-size:12.5px;color:var(--texte-doux)}
+  .pastille-modif{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .chapeau-fin{margin-left:auto;display:flex;align-items:center;gap:4px}
+  .ic-btn{display:grid;place-content:center;width:30px;height:30px;border-radius:var(--rayon);
+    color:var(--texte-doux)}
+  .ic-btn:hover{background:var(--fond);color:var(--texte)}
+  .btn-plein{display:flex;align-items:center;gap:7px;height:30px;padding:0 13px;
+    border-radius:var(--rayon);background:var(--accent);color:#fff;font-weight:560;font-size:12.5px;
+    transition:background .15s}
+  .btn-plein:hover{filter:brightness(1.08)}
+
+  /* ---------- ruban ---------- */
+  .ruban{display:flex;align-items:stretch;gap:0;padding:0 10px;height:92px;
+    background:var(--surface);border-bottom:1px solid var(--bord);flex:none;overflow-x:auto}
+  .groupe{display:flex;flex-direction:column;justify-content:space-between;
+    padding:7px 14px 4px;border-right:1px solid var(--bord);flex:none}
+  .groupe:last-child{border-right:0}
+  .groupe-outils{display:flex;align-items:flex-start;gap:3px}
+    .groupe-nom{font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--texte-faible);text-align:center;padding-top:3px}
+  .outil{display:flex;flex-direction:column;align-items:center;gap:5px;width:60px;
+    padding:5px 2px;border-radius:var(--rayon);color:var(--texte-doux);font-size:10.5px;
+    line-height:1.25;text-align:center}
+  .outil:hover{background:var(--fond);color:var(--texte)}
+  .outil .jeton{color:var(--accent)}
+  .outil.actif{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent)}
+
+  /* ---------- corps ---------- */
+  .corps{display:flex;flex:1;min-height:0}
+
+  .colonne{background:var(--surface);border-right:1px solid var(--bord);
+    width:186px;flex:none;display:flex;flex-direction:column;min-height:0}
+  .colonne-titre,.volet-titre{display:flex;align-items:center;justify-content:space-between;
+    padding:9px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--texte-faible);border-bottom:1px solid var(--bord);flex:none}
+  .colonne-liste{overflow-y:auto;padding:7px;display:flex;flex-direction:column;gap:5px}
+  .vignette{border:1.5px solid var(--bord);border-radius:var(--rayon);padding:8px 9px;
+    background:var(--fond);font-size:11.5px;color:var(--texte-doux);cursor:pointer}
+  .vignette:hover{border-color:var(--bord-fort)}
+  .vignette.actif{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,#fff);
+    color:var(--texte)}
+  .vignette b{display:block;font-weight:600;color:var(--texte);font-size:11.5px;margin-bottom:2px}
+  .vignette .lignes{display:flex;flex-direction:column;gap:3px;margin-top:5px}
+  .vignette .lignes i{height:2.5px;border-radius:2px;background:var(--bord-fort);display:block}
+
+  .scene{flex:1;min-width:0;overflow:auto;padding:22px;
+    background:
+      linear-gradient(90deg,rgba(27,34,43,.035) 1px,transparent 1px) 0 0/22px 22px,
+      linear-gradient(rgba(27,34,43,.035) 1px,transparent 1px) 0 0/22px 22px,
+      var(--fond)}
+  .feuille{max-width:760px;margin:0 auto;background:var(--surface);border-radius:10px;
+    box-shadow:var(--ombre);border-top:3px solid var(--accent);overflow:hidden}
+
+  .volet{background:var(--surface);border-left:1px solid var(--bord);width:224px;flex:none;
+    display:flex;flex-direction:column;min-height:0}
+  .volet-corps{overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:16px}
+  .section-nom{font-size:10px;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--texte-faible);margin-bottom:8px}
+  .champ{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin-bottom:7px;font-size:12px;color:var(--texte-doux)}
+  .champ .val{padding:3px 8px;border:1px solid var(--bord);border-radius:5px;
+    background:var(--fond);color:var(--texte);font-size:11.5px;min-width:76px;text-align:right}
+  .puce-couleur{width:13px;height:13px;border-radius:3px;border:1px solid var(--bord-fort)}
+
+  /* ---------- barre d'onglets, en bas ---------- */
+  .pied{display:flex;align-items:center;gap:3px;padding:0 9px;height:38px;flex:none;
+    background:var(--surface);border-top:1px solid var(--bord);overflow-x:auto}
+  .onglet{display:flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:6px;
+    font-size:12.5px;color:var(--texte-doux);white-space:nowrap;flex:none;
+    border:1.5px solid transparent;transition:background .12s}
+  .onglet:hover{background:var(--fond)}
+  .onglet .jeton{opacity:.72}
+  .onglet.actif{background:color-mix(in srgb,var(--tc) 10%,#fff);
+    border-color:color-mix(in srgb,var(--tc) 42%,transparent);
+    color:var(--tc);font-weight:600}
+  .onglet.actif .jeton{opacity:1}
+  .plus{display:grid;place-content:center;width:26px;height:26px;border-radius:6px;
+    color:var(--texte-doux);flex:none}
+  .plus:hover{background:var(--fond);color:var(--texte)}
+  .pied-fin{margin-left:auto;display:flex;align-items:center;gap:10px;
+    font-size:11.5px;color:var(--texte-faible);padding-left:14px;flex:none}
+
+  /* ---------- menu de création ---------- */
+  .voile{position:fixed;inset:0;background:rgba(27,34,43,.34);display:none;
+    align-items:center;justify-content:center;z-index:40;padding:20px}
+  .voile.ouvert{display:flex}
+  .carte{background:var(--surface);border-radius:13px;box-shadow:0 18px 50px rgba(27,34,43,.26);
+    width:min(560px,100%);padding:22px;max-height:90vh;overflow:auto}
+  .carte h2{margin:0 0 3px;font-size:16px}
+  .carte p{margin:0 0 17px;color:var(--texte-doux);font-size:12.5px}
+  .grille-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px}
+  .choix{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1.5px solid var(--bord);
+    border-radius:9px;text-align:left;background:var(--surface)}
+  .choix:hover{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 5%,#fff)}
+  .choix .jeton{color:var(--tc);flex:none;margin-top:1px}
+  .choix b{display:block;font-size:13px;margin-bottom:2px}
+  .choix span{font-size:11.5px;color:var(--texte-doux);line-height:1.4}
+
+  /* ---------- contenus factices ---------- */
+  .doc-texte{padding:40px 46px;font-size:14px;line-height:1.75;color:#222A33}
+  .doc-texte h1{font-size:17px;margin:0 0 20px}
+  .doc-texte p{margin:0 0 13px}
+  .balise{background:color-mix(in srgb,var(--accent) 14%,transparent);
+    border-bottom:1.5px solid var(--accent);border-radius:3px;padding:1px 5px;
+    color:var(--accent);font-weight:600;white-space:nowrap}
+
+  table.grille{border-collapse:collapse;width:100%;font-size:12.5px}
+  table.grille th,table.grille td{border:1px solid var(--bord);padding:6px 9px;text-align:left}
+  table.grille thead th{background:var(--fond);font-weight:600;font-size:11px;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--texte-doux)}
+  table.grille thead th .typ{display:block;font-size:9.5px;letter-spacing:.03em;
+    text-transform:none;color:var(--texte-faible);font-weight:500;margin-top:1px}
+  table.grille td.num{text-align:right;font-variant-numeric:tabular-nums}
+  table.grille tr.total td{background:color-mix(in srgb,var(--accent) 9%,#fff);
+    font-weight:650;border-top:2px solid var(--accent)}
+  .coin{width:38px;background:var(--fond);color:var(--texte-faible);text-align:center!important;
+    font-weight:500!important;font-size:11px!important}
+
+  .form-champ{margin-bottom:15px}
+  .form-champ label{display:block;font-size:11.5px;color:var(--texte-doux);margin-bottom:4px;
+    font-weight:560}
+  .form-champ .faux{border:1px solid var(--bord);border-radius:var(--rayon);padding:8px 11px;
+    background:var(--fond);font-size:13px;color:var(--texte)}
+  .form-champ .faux.vide{color:var(--texte-faible)}
+
+  .diapo{aspect-ratio:16/9;background:#16273E;border-radius:7px;display:flex;
+    flex-direction:column;justify-content:center;padding:38px;color:#fff;margin:26px}
+  .diapo h2{margin:0 0 9px;font-size:26px;letter-spacing:-.02em}
+  .diapo p{margin:0;opacity:.72;font-size:13.5px}
+
+  .pdf-page{background:#fff;border:1px solid var(--bord);border-radius:5px;margin:26px;
+    padding:34px;min-height:300px;position:relative;font-size:12.5px;color:#333;line-height:1.7}
+  .surcouche{position:absolute;border:1.5px dashed var(--accent);border-radius:4px;
+    background:color-mix(in srgb,var(--accent) 10%,transparent);padding:4px 9px;
+    font-size:12px;color:var(--accent);font-weight:600}
+
+  .avis{margin:0 auto 16px;max-width:760px;display:flex;gap:9px;align-items:flex-start;
+    padding:9px 13px;border-radius:var(--rayon);
+    background:color-mix(in srgb,var(--accent) 8%,#fff);
+    border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);
+    font-size:12px;color:var(--texte-doux)}
+  .avis b{color:var(--accent)}
+
+  @media(max-width:900px){
+    .colonne,.volet{display:none}
+    .ruban{height:88px}
+    .doc-texte{padding:24px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="chapeau">
+    <div class="logo">
+      <span class="logo-pastille"><svg width="12" height="12" viewBox="0 0 12 12"><rect x="0" y="0" width="3.4" height="12" rx="1" fill="#5E7699"/><rect x="4.8" y="0" width="7.2" height="5.2" rx="1" fill="#FF9E8A"/><rect x="4.8" y="6.8" width="7.2" height="5.2" rx="1" fill="#F0EBE0"/></svg></span>
+      Europa<em>/office</em>
+    </div>
+    <div class="fichier"><span class="pastille-modif"></span> Réclamation_Dupont_2026.eo.html</div>
+    <div class="chapeau-fin">
+      <button class="ic-btn" title="Annuler"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h7a3 3 0 010 6H7"/><path d="M6 5L3 8l3 3"/></svg></button>
+      <button class="ic-btn" title="Rétablir"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H6a3 3 0 000 6h3"/><path d="M10 5l3 3-3 3"/></svg></button>
+      <button class="ic-btn" title="Chiffrer ce classeur"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="10" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg></button>
+      <button class="ic-btn" title="Exporter en PDF"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8"/><path d="M5 7l3 3 3-3"/><path d="M3 12.5h10"/></svg></button>
+      <button class="btn-plein"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7l3 3v7H3z"/><path d="M5.5 3v3.5h5"/></svg> Enregistrer</button>
+    </div>
+  </div>
+
+  <div class="ruban" id="ruban"></div>
+
+  <div class="corps">
+    <aside class="colonne">
+      <div class="colonne-titre"><span id="colonne-titre">Pages</span>
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg></div>
+      <div class="colonne-liste" id="colonne-liste"></div>
+    </aside>
+
+    <main class="scene" id="scene"></main>
+
+    <aside class="volet">
+      <div class="volet-titre"><span>Propriétés</span></div>
+      <div class="volet-corps" id="volet"></div>
+    </aside>
+  </div>
+
+  <div class="pied" id="pied"></div>
+</div>
+
+<div class="voile" id="voile">
+  <div class="carte">
+    <h2>Ajouter un onglet</h2>
+    <p>Choisissez ce que cet onglet contiendra. Le type fixe ses outils et ses règles.</p>
+    <div class="grille-types" id="grille-types"></div>
+  </div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Maquette d'interface. Aucune logique réelle : les contenus sont
+   figés, seuls le ruban, la couleur et le centre suivent l'onglet.
+   --------------------------------------------------------------- */
+
+const io_ = {
+  plus:'<path d="M8 3v10M3 8h10"/>',
+  coller:'<rect x="4" y="3" width="8" height="11" rx="1"/><path d="M6 3.2V2.4h4v.8"/>',
+  copier:'<rect x="5.5" y="2.5" width="8" height="9" rx="1"/><path d="M10.5 11.5v1a1 1 0 01-1 1h-6a1 1 0 01-1-1v-7a1 1 0 011-1h1"/>',
+  titre:'<path d="M3 12.5V3.5h3.2a2.6 2.6 0 010 5.2H3"/><path d="M9.5 12.5V6.8h3.5"/>',
+  corps:'<path d="M2.5 4h11M2.5 7h11M2.5 10h11M2.5 13h6"/>',
+  liste:'<circle cx="3.4" cy="4.4" r="1"/><circle cx="3.4" cy="8" r="1"/><circle cx="3.4" cy="11.6" r="1"/><path d="M6.4 4.4h7M6.4 8h7M6.4 11.6h7"/>',
+  balise:'<path d="M2.8 2.8h5.6l4.8 4.8-5.6 5.6-4.8-4.8z"/><circle cx="5.6" cy="5.6" r=".9"/>',
+  image:'<rect x="2.5" y="3.5" width="11" height="9" rx="1"/><circle cx="5.8" cy="6.6" r="1.1"/><path d="M2.5 10.6l3.2-2.8 3 2.6 2-1.6 2.8 2.4"/>',
+  marges:'<rect x="2.5" y="2.5" width="11" height="11" rx="1"/><path d="M5 2.5v11M11 2.5v11" stroke-dasharray="2 1.6"/>',
+  colonnes:'<rect x="2.5" y="2.5" width="11" height="11" rx="1"/><path d="M8 2.5v11"/>',
+  apercu:'<path d="M1.8 8s2.4-4 6.2-4 6.2 4 6.2 4-2.4 4-6.2 4-6.2-4-6.2-4z"/><circle cx="8" cy="8" r="1.7"/>',
+  format:'<path d="M3.2 12.5L7 3.5h2l3.8 9"/><path d="M4.9 9.4h6.2"/>',
+  fusion:'<path d="M2.5 5h4v6h-4z"/><path d="M9.5 5h4v6h-4z"/><path d="M6.5 8h3" stroke-dasharray="1.5 1.2"/>',
+  bordure:'<rect x="2.5" y="2.5" width="11" height="11" rx="1"/><path d="M2.5 8h11M8 2.5v11" stroke-dasharray="2 1.6"/>',
+  formule:'<path d="M12.5 3H6.4L9 8l-2.6 5h6.1"/><path d="M3 8h3"/>',
+  somme:'<path d="M12 3.2H4l4 4.8-4 4.8h8"/>',
+  trier:'<path d="M4.2 3v10M2.2 10.8l2 2.2 2-2.2"/><path d="M8.5 4.2h5M8.5 8h3.6M8.5 11.8h2.2"/>',
+  filtrer:'<path d="M2.4 3.2h11.2l-4.3 5v4.4l-2.6 1.2V8.2z"/>',
+  importer:'<path d="M8 2.5v7"/><path d="M5.2 6.8L8 9.6l2.8-2.8"/><path d="M2.8 12.2h10.4"/>',
+  regles:'<path d="M8 1.9l5.2 2.2v3.6c0 3.1-2.2 5.2-5.2 6.4-3-1.2-5.2-3.3-5.2-6.4V4.1z"/><path d="M5.9 7.9l1.5 1.6 2.8-3"/>',
+  doublon:'<circle cx="6" cy="8" r="3.6"/><circle cx="10" cy="8" r="3.6"/>',
+  diapo_add:'<rect x="2" y="3.2" width="12" height="9.6" rx="1"/><path d="M8 6.2v3.6M6.2 8h3.6"/>',
+  dispo:'<rect x="2.4" y="2.4" width="11.2" height="11.2" rx="1"/><path d="M2.4 6.4h11.2M8 6.4v7.2"/>',
+  transition:'<path d="M2.6 8h6.4"/><path d="M6.8 5.6L9.2 8l-2.4 2.4"/><path d="M11.6 3.4v9.2"/>',
+  lancer:'<path d="M4.6 3.2l8 4.8-8 4.8z"/>',
+  notes:'<rect x="2.6" y="2.6" width="10.8" height="10.8" rx="1"/><path d="M5.2 6h5.6M5.2 8.6h5.6M5.2 11.2h3"/>',
+  champ:'<rect x="2" y="5.4" width="12" height="5.2" rx="1"/><path d="M4.6 6.8v2.4"/>',
+  oblig:'<path d="M8 2.6v10.8M3.3 5.3l9.4 5.4M12.7 5.3l-9.4 5.4"/>',
+  mode:'<path d="M8 2.4a5.6 5.6 0 105.6 5.6"/><path d="M8 4.9v3.1h3.1"/>',
+  reduit:'<rect x="2.4" y="2.4" width="11.2" height="11.2" rx="1"/><path d="M9.6 6.4H6.4v3.2"/>',
+  pages:'<rect x="2.4" y="2.4" width="7.4" height="9.6" rx="1"/><path d="M5.4 13.6h7V4.8"/>',
+  tampon:'<path d="M5 7.2c0-2 .8-2.6.8-4A2.2 2.2 0 018 1.9a2.2 2.2 0 012.2 1.3c0 1.4.8 2 .8 4z"/><path d="M3.2 9.2h9.6v2.2H3.2z"/><path d="M3.8 13.6h8.4"/>',
+  trait:'<path d="M2.6 11.4L13.4 4.6"/><circle cx="3.2" cy="11.8" r="1.2"/><circle cx="12.8" cy="4.2" r="1.2"/>',
+  aplatir:'<path d="M8 2.4l5.4 3.2L8 8.8 2.6 5.6z"/><path d="M2.6 9.4L8 12.6l5.4-3.2"/>'
+}
+const ic = {
+  texte:'<path d="M3.5 2.5h9v11h-9z"/><path d="M6 5.5h4M6 8h4M6 10.5h2.5"/>',
+  tableur:'<rect x="2.5" y="3" width="11" height="10" rx="1"/><path d="M2.5 6.5h11M2.5 9.8h11M6.2 3v10M9.8 3v10"/>',
+  data:'<rect x="2.5" y="3" width="11" height="10" rx="1"/><path d="M2.5 6.2h11" stroke-width="2.4"/><path d="M2.5 10.6h11"/><path d="M6.2 6.2v7M9.8 6.2v7"/>',
+  diapos:'<rect x="2" y="3.5" width="12" height="9" rx="1"/><path d="M2 6.2h12"/><path d="M4.6 8.6h4.2M4.6 10.5h6"/>',
+  formulaire:'<rect x="2.5" y="2.5" width="11" height="11" rx="1.2"/><path d="M5 6h6"/><rect x="4.8" y="8.6" width="2.4" height="2.4" rx=".5"/><path d="M8.6 9.8h2.6"/>',
+  pdf:'<path d="M3.5 2.5h5.5l3.5 3.5v7.5h-9z"/><path d="M9 2.5V6h3.5"/><path d="M5.8 9.5h4.4M5.8 11.4h3"/>'
+}
+const jeton = (n,t=16,e=1.5) =>
+  `<svg class="jeton" width="${t}" height="${t}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="${e}" stroke-linecap="round" stroke-linejoin="round">${ic[n] ?? io_[n] ?? io_.plus}</svg>`
+
+const TYPES = {
+  texte:      {nom:'Texte',      couleur:'#2563A8', quoi:'Courriers, rapports, notes. Mise en page et impression.'},
+  tableur:    {nom:'Tableur',    couleur:'#1E7A4D', quoi:'Grille libre, formules, calculs de travail.'},
+  data:       {nom:'Data',       couleur:'#6B4FA8', quoi:'Table à colonnes typées. La source de vérité.'},
+  diapos:     {nom:'Diapos',     couleur:'#C96A1F', quoi:'Présentation, transitions, notes de l’orateur.'},
+  formulaire: {nom:'Formulaire', couleur:'#0E7C86', quoi:'Saisie guidée qui alimente une table.'},
+  pdf:        {nom:'PDF',        couleur:'#B03A5B', quoi:'PDF importé, annoté par surimpression.'}
+}
+
+const ONGLETS = [
+  {id:'dossier',    type:'formulaire', nom:'Dossier'},
+  {id:'releves',    type:'data',       nom:'Relevés'},
+  {id:'analyse',    type:'tableur',    nom:'Analyse'},
+  {id:'references', type:'data',       nom:'Références'},
+  {id:'pieces',     type:'pdf',        nom:'Pièces'},
+  {id:'reponse',    type:'texte',      nom:'Réponse'},
+  {id:'restit',     type:'diapos',     nom:'Restitution'}
+]
+
+/* Ruban : groupes d'outils propres à chaque type. */
+const RUBANS = {
+  texte:[
+    ['Presse-papiers',[['coller','Coller'],['copier','Copier']]],
+    ['Style',[['titre','Titre'],['corps','Corps'],['liste','Liste']]],
+    ['Insérer',[['balise','Balise'],['tableur','Tableau'],['image','Image'],['champ','Zone à remplir']]],
+    ['Mise en page',[['marges','Marges'],['colonnes','Colonnes'],['apercu','Aperçu']]]
+  ],
+  tableur:[
+    ['Presse-papiers',[['coller','Coller'],['copier','Copier']]],
+    ['Cellules',[['format','Format'],['fusion','Fusionner'],['bordure','Bordures']]],
+    ['Calcul',[['formule','Formule'],['balise','Référence'],['somme','Somme']]],
+    ['Données',[['trier','Trier'],['filtrer','Filtrer'],['importer','Importer CSV']]]
+  ],
+  data:[
+    ['Colonnes',[['plus','Ajouter'],['format','Type'],['somme','Agrégat']]],
+    ['Lignes',[['plus','Ajouter'],['trier','Trier'],['filtrer','Filtrer']]],
+    ['Données',[['importer','Importer CSV'],['formulaire','Formulaire lié'],['balise','Référence']]],
+    ['Contrôle',[['regles','Règles'],['doublon','Doublons']]]
+  ],
+  diapos:[
+    ['Diapositive',[['diapo_add','Ajouter'],['dispo','Disposition'],['transition','Transition']]],
+    ['Insérer',[['corps','Texte'],['image','Image'],['somme','Graphique'],['balise','Balise']]],
+    ['Présenter',[['lancer','Lancer'],['notes','Notes']]]
+  ],
+  formulaire:[
+    ['Champs',[['plus','Ajouter'],['titre','Libellé'],['data','Depuis une table']]],
+    ['Règles',[['oblig','Obligatoire'],['regles','Validation']]],
+    ['Diffusion',[['mode','Mode remplissage'],['pdf','Export PDF'],['reduit','Copie réduite']]]
+  ],
+  pdf:[
+    ['Document',[['importer','Importer'],['pages','Pages']]],
+    ['Surimpression',[['corps','Texte'],['champ','Champ'],['tampon','Tampon'],['trait','Trait']]],
+    ['Sortie',[['apercu','Exporter'],['aplatir','Aplatir']]]
+  ]
+}
+
+const COLONNE = {
+  texte:      ['Pages',        ['Page 1','Page 2']],
+  tableur:    ['Feuilles',     ['Calcul','Historique']],
+  data:       ['Vues',         ['Toutes les lignes','Année en cours']],
+  diapos:     ['Diapositives', ['Contexte','Constat','Décision']],
+  formulaire: ['Sections',     ['Usager','Réclamation']],
+  pdf:        ['Pages',        ['Page 1','Page 2','Page 3']]
+}
+
+const VOLETS = {
+  texte:      [['Page',[['Format','A4'],['Marges','2,5 cm']]],['Paragraphe',[['Style','Corps'],['Interligne','1,15']]]],
+  tableur:    [['Cellule',[['Format','Nombre'],['Décimales','2']]],['Plage',[['Nom','—'],['Bordures','Aucune']]]],
+  data:       [['Colonne',[['Nom','Consommation'],['Type','Nombre'],['Unité','m³'],['Agrégat','Somme']]],['Table',[['Lignes','6'],['Clé','n° relevé']]]],
+  diapos:     [['Diapositive',[['Format','16:9'],['Transition','Morph']]],['Notes',[['Longueur','2 lignes']]]],
+  formulaire: [['Champ',[['Libellé','Nom'],['Type','Texte'],['Obligatoire','Oui']]],['Cible',[['Table','Relevés'],['Mode','Ajout']]]],
+  pdf:        [['Document',[['Pages','3'],['Taille','412 Ko']]],['Élément',[['Type','Texte'],['Page','1']]]]
+}
+
+/* Contenus figés du centre. */
+function scene(t){
+  if(t==='texte') return `
+    <div class="avis">${jeton('data',15)}<div><b>Les parties colorées sont des balises</b> — elles citent une donnée d'un autre onglet. Corrigez le relevé, la phrase suit.</div></div>
+    <div class="feuille"><div class="doc-texte">
+      <h1>Réponse à réclamation — surconsommation</h1>
+      <p>Madame, Monsieur <span class="balise">Dossier.nom</span>,</p>
+      <p>Vous nous avez saisis le <span class="balise">Dossier.date</span> au sujet de votre abonnement n° <span class="balise">Dossier.abonné</span>.</p>
+      <p>Le relevé du compteur fait apparaître une consommation de <span class="balise">Relevés.total</span> m³, à comparer à votre moyenne des trois années précédentes, soit <span class="balise">Analyse.moyenne</span> m³. L'écart constaté s'établit à <span class="balise">Analyse.écart</span> %.</p>
+      <p>En conséquence, et au vu de l'attestation de réparation que vous nous avez transmise, un dégrèvement de <span class="balise">Analyse.dégrèvement</span> € vous est accordé.</p>
+    </div></div>`
+
+  if(t==='data') return `
+    <div class="avis">${jeton('data',15)}<div><b>Colonnes typées, ligne de total structurelle.</b> C'est elle que vise la balise du courrier — ajouter des lignes ne la déplace pas.</div></div>
+    <div class="feuille"><div style="padding:18px">
+      <table class="grille">
+        <thead><tr><th class="coin"></th>
+          <th>Date<span class="typ">date</span></th>
+          <th>Index<span class="typ">nombre</span></th>
+          <th>Consommation<span class="typ">nombre · m³</span></th>
+          <th>Nature<span class="typ">choix</span></th></tr></thead>
+        <tbody>
+          <tr><td class="coin">1</td><td>15/01/2026</td><td class="num">1 204</td><td class="num">38</td><td>Relevé réel</td></tr>
+          <tr><td class="coin">2</td><td>14/04/2026</td><td class="num">1 251</td><td class="num">47</td><td>Relevé réel</td></tr>
+          <tr><td class="coin">3</td><td>16/07/2026</td><td class="num">1 698</td><td class="num">447</td><td>Relevé réel</td></tr>
+          <tr><td class="coin">4</td><td>13/10/2026</td><td class="num">1 742</td><td class="num">44</td><td>Estimation</td></tr>
+          <tr class="total"><td class="coin">Σ</td><td>Total</td><td class="num">—</td><td class="num">576</td><td>4 relevés</td></tr>
+        </tbody>
+      </table>
+    </div></div>`
+
+  if(t==='tableur') return `
+    <div class="avis">${jeton('tableur',15)}<div><b>Grille libre.</b> On écrit où l'on veut, on calcule ce qu'on veut — les cellules vides ne sont pas stockées.</div></div>
+    <div class="feuille"><div style="padding:18px">
+      <table class="grille">
+        <thead><tr><th class="coin"></th><th>A</th><th>B</th><th>C</th></tr></thead>
+        <tbody>
+          <tr><td class="coin">1</td><td>Consommation constatée</td><td class="num">576</td><td>m³</td></tr>
+          <tr><td class="coin">2</td><td>Moyenne des 3 années</td><td class="num">171</td><td>m³</td></tr>
+          <tr><td class="coin">3</td><td>Écart</td><td class="num">237 %</td><td>=(B1-B2)/B2</td></tr>
+          <tr><td class="coin">4</td><td>Seuil de déclenchement</td><td class="num">342</td><td>=B2*2</td></tr>
+          <tr><td class="coin">5</td><td>Volume dégrevable</td><td class="num">234</td><td>=B1-B4</td></tr>
+          <tr class="total"><td class="coin">6</td><td>Dégrèvement</td><td class="num">421,20 €</td><td>=B5*Références.tarif</td></tr>
+        </tbody>
+      </table>
+    </div></div>`
+
+  if(t==='formulaire') return `
+    <div class="avis">${jeton('formulaire',15)}<div><b>Saisie guidée.</b> Les champs viennent des colonnes de la table ; chaque envoi y ajoute une ligne.</div></div>
+    <div class="feuille"><div style="padding:30px 34px">
+      <div class="form-champ"><label>Nom de l'usager *</label><div class="faux">DUPONT Martine</div></div>
+      <div class="form-champ"><label>Adresse du point de livraison *</label><div class="faux">12 rue des Vergers, 68210 Dannemarie</div></div>
+      <div class="form-champ"><label>Numéro d'abonné *</label><div class="faux">A-2026-0417</div></div>
+      <div class="form-champ"><label>Date de la réclamation *</label><div class="faux">04/09/2026</div></div>
+      <div class="form-champ"><label>Canal de réception</label><div class="faux vide">Courrier · Guichet · Téléphone · Courriel</div></div>
+      <div class="form-champ"><label>Observations</label><div class="faux vide">Fuite signalée après compteur, réparation le 28/08.</div></div>
+    </div></div>`
+
+  if(t==='diapos') return `
+    <div class="feuille"><div class="diapo"><h2>Réclamations 2026</h2><p>Bilan trimestriel — service relations usagers</p></div></div>`
+
+  return `
+    <div class="avis">${jeton('pdf',15)}<div><b>Surimpression.</b> Le PDF reçu n'est pas modifié : on écrit par-dessus, et l'export fusionne les deux.</div></div>
+    <div class="feuille"><div class="pdf-page">
+      <div style="color:#888;font-size:11px;margin-bottom:14px">ATTESTATION DE RÉPARATION — page 1 sur 3</div>
+      <p>Je soussigné, plombier, atteste avoir procédé à la réparation d'une fuite sur canalisation après compteur, au domicile de l'abonné désigné ci-dessus.</p>
+      <p style="color:#999">Date d'intervention : ....................................</p>
+      <p style="color:#999">Nature de la fuite : ....................................</p>
+      <div class="surcouche" style="top:128px;left:180px">28/08/2026</div>
+      <div class="surcouche" style="top:176px;left:170px">Canalisation enterrée</div>
+      <div class="surcouche" style="bottom:32px;right:34px">REÇU LE 04/09/2026</div>
+    </div></div>`
+}
+
+let actif = 'releves'
+
+function rendre(){
+  const o = ONGLETS.find(x=>x.id===actif)
+  const t = TYPES[o.type]
+  document.documentElement.style.setProperty('--accent', t.couleur)
+
+  document.getElementById('ruban').innerHTML = RUBANS[o.type].map(([nom,outils])=>
+    `<div class="groupe"><div class="groupe-outils">${
+      outils.map((u,i)=>`<button class="outil${i===0?' actif':''}">${jeton(u[0],19,1.4)}<span>${u[1]}</span></button>`).join('')
+    }</div><div class="groupe-nom">${nom}</div></div>`).join('')
+
+  const [titre,items] = COLONNE[o.type]
+  document.getElementById('colonne-titre').textContent = titre
+  document.getElementById('colonne-liste').innerHTML = items.map((n,i)=>
+    `<div class="vignette${i===0?' actif':''}"><b>${n}</b>
+      <div class="lignes"><i style="width:86%"></i><i style="width:70%"></i><i style="width:78%"></i></div></div>`).join('')
+
+  document.getElementById('scene').innerHTML = scene(o.type)
+
+  document.getElementById('volet').innerHTML = VOLETS[o.type].map(([sec,champs])=>
+    `<div><div class="section-nom">${sec}</div>${
+      champs.map(([k,v])=>`<div class="champ"><span>${k}</span><span class="val">${v}</span></div>`).join('')
+    }</div>`).join('') +
+    `<div><div class="section-nom">Type d'onglet</div>
+      <div class="champ"><span>${t.nom}</span><span class="puce-couleur" style="background:${t.couleur}"></span></div></div>`
+
+  document.getElementById('pied').innerHTML =
+    ONGLETS.map(x=>{
+      const c = TYPES[x.type].couleur
+      return `<button class="onglet${x.id===actif?' actif':''}" style="--tc:${c}" data-id="${x.id}"
+        title="${TYPES[x.type].nom}">${jeton(x.type,14,1.6)}${x.nom}</button>`
+    }).join('') +
+    `<button class="plus" id="plus" title="Ajouter un onglet">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 3.5v9M3.5 8h9"/></svg></button>
+    <div class="pied-fin"><span>7 onglets</span><span>·</span><span>Non chiffré</span></div>`
+
+  document.querySelectorAll('.onglet').forEach(b=>
+    b.onclick = ()=>{ actif = b.dataset.id; rendre() })
+  document.getElementById('plus').onclick = ()=> document.getElementById('voile').classList.add('ouvert')
+}
+
+document.getElementById('grille-types').innerHTML = Object.entries(TYPES).map(([k,v])=>
+  `<button class="choix" style="--tc:${v.couleur}">${jeton(k,19,1.5)}
+    <span><b>${v.nom}</b><span>${v.quoi}</span></span></button>`).join('')
+
+document.getElementById('voile').onclick = e =>{
+  if(e.target.id==='voile' || e.target.closest('.choix'))
+    document.getElementById('voile').classList.remove('ouvert')
+}
+
+rendre()
+</script>
+</body>
+</html>
