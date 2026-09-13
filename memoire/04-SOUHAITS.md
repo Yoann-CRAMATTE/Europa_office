@@ -778,4 +778,72 @@ Une synthèse consolidée sera dressée quand la liste des points sera close.
 
 ---
 
-## Point 11 — (à venir)
+## Point 11 — L'onglet PDF revient pour l'import, et le poids n'est plus la priorité
+
+**Dit :** « On va pouvoir générer des PDF formulaire à partir de la partie
+équivalent à Word, et on garde un onglet PDF si on veut importer un PDF, et qu'il
+soit stocké en un seul et unique. Le but n'est pas forcément que tout soit léger,
+mais qu'on puisse avoir un seul projet avec tout regroupé dans un fichier. »
+
+### 11.1 — Le PDF à champs remplissables se génère depuis l'onglet texte
+
+Nuance le point 10 : la production d'un PDF interactif ne part pas seulement de
+l'onglet formulaire, mais aussi de l'onglet texte. On rédige un courrier ou une
+attestation, on y place des zones à remplir, on exporte.
+
+Conséquence : le module texte doit savoir porter des **zones de saisie** dans le
+flux du document, au même titre qu'un paragraphe ou une image. Ce n'est pas une
+propriété d'export, c'est un élément du document.
+
+### 11.2 — L'onglet PDF est rétabli, pour l'import
+
+Retour à la seconde lecture de l'ambiguïté du point 4, écartée à tort : un onglet
+PDF sert à **loger un PDF existant** dans le classeur, pour que le projet tienne
+entier dans un fichier. Un marché public avec son cahier des charges, un dossier
+avec les pièces reçues.
+
+Deux besoins distincts à ne pas confondre :
+
+| Besoin | Coût | Verdict |
+|---|---|---|
+| **Stocker** le PDF dans le fichier et pouvoir le ressortir | faible — encodage en base64, environ un tiers de poids en plus | acquis |
+| **Afficher** le PDF dans l'onglet | variable, voir ci-dessous | à trancher |
+
+Pour l'affichage, deux voies :
+
+1. **Le lecteur PDF du navigateur**, via un cadre pointant sur le PDF stocké.
+   Chrome, Edge, Firefox et Safari en embarquent tous un. Coût proche de zéro.
+   **À vérifier par un essai** : certains navigateurs refusent d'afficher un PDF
+   en cadre depuis un fichier local. Si cela passe, c'est la bonne réponse.
+2. **Embarquer un moteur de rendu** (PDF.js, environ 1 Mo). Fonctionne partout,
+   mais c'est le plus gros poste de poids de tout le projet.
+
+L'annotation d'un PDF importé n'est **pas** demandée à ce stade. À ne pas
+supposer.
+
+### 11.3 — Changement de priorité : le regroupement prime sur la légèreté
+
+**C'est une inflexion importante, et elle réoriente plusieurs décisions passées.**
+
+Le but n'est pas de produire des fichiers légers, mais de **tenir un projet entier
+dans un seul fichier**. Un fichier lourd qui contient tout vaut mieux que cinq
+fichiers légers éparpillés.
+
+Ce que cela change :
+
+- Les budgets de poids inscrits dans `01-ARCHITECTURE.md` deviennent caducs.
+  **Ce document est à réviser** quand la liste sera close.
+- Mes objections fondées sur le poids — au point 4, au point 8 — perdent leur
+  force. Elles restent consignées, mais ne commandent plus les choix.
+- Embarquer PDF.js redevient envisageable si c'est le prix de l'import.
+- Le critère devient : **le fichier s'ouvre-t-il encore en un temps acceptable,
+  et se transmet-il encore ?** Un fichier de plusieurs mégaoctets reste
+  transmissible ; un fichier lent à ouvrir ne vaut rien.
+
+**Seuil de vigilance à retenir** : les pièces jointes de courriel sont couramment
+limitées à 10 ou 25 Mo selon les services. Ce n'est pas une règle de conception,
+mais la limite où le regroupement se retourne contre son but.
+
+---
+
+## Point 12 — (à venir)
