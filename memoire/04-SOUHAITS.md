@@ -356,4 +356,80 @@ visuel. Trois chiffres et quatre images trancheront le débat mieux que ce texte
 
 ---
 
-## Point 6 — (à venir)
+## Point 6 — Onglet « data », références par case, grille créée à la demande
+
+**Dit :** « On va ajouter dans les onglets un format qu'on pourrait appeler data,
+qui lui ne sert qu'à faire des tableaux de données, car le Excel te fera un
+tableau mais peut faire aussi une espèce d'affichage. Je veux que dans un onglet
+Word je puisse appeler un onglet Excel et la case A2. Dans un équivalent Excel ou
+data, on ne crée pas tout de suite des milliers de lignes et de colonnes, on les
+crée au fur et à mesure du besoin pour alléger le fichier. »
+
+Trois demandes distinctes.
+
+### 6.1 — Un type d'onglet « data », séparé du tableur
+
+L'intuition est bonne et rarement tenue par les suites existantes : séparer la
+**donnée** de l'**espace de calcul**. Encore faut-il que la frontière soit nette,
+sinon l'utilisateur ne saura jamais lequel des deux choisir.
+
+Frontière proposée :
+
+| | **data** | **tableur** |
+|---|---|---|
+| Nature | une table structurée | une grille libre |
+| Colonnes | typées et nommées : texte, nombre, date, booléen, liste de choix, lien vers un autre onglet | aucune, on écrit où l'on veut |
+| Mise en forme | aucune par cellule, l'apparence vient du type | libre, cellule par cellule |
+| Formules | calculs par colonne | formules libres dans chaque cellule |
+| Rôle | **la source de vérité** | **l'espace de travail** |
+
+Le type des colonnes n'est pas un détail de confort : il garantit qu'une colonne
+« montant » ne contiendra jamais « environ 300 € », et c'est ce qui rend les
+totaux et les références fiables.
+
+Conséquence utile : `data` devient la cible naturelle des références entre
+onglets, et le point d'entrée d'un futur import de données extérieures.
+
+### 6.2 — Référencer une case d'un autre onglet
+
+Confirme et précise le point 4. Une écriture du type `Budget!A2` dans un onglet
+texte, un calcul ou une présentation.
+
+**Piège à traiter dès la conception : que devient `A2` si l'on insère une ligne
+au-dessus ?**
+
+Une référence par coordonnées se décale silencieusement, et le document affiche
+alors la mauvaise valeur sans rien signaler. C'est le défaut le plus courant de
+ce genre de mécanisme.
+
+Réponse : **chaque ligne et chaque colonne portent un identifiant interne
+stable**, invisible pour l'utilisateur. La référence pointe sur cet identifiant.
+`A2` n'est qu'un affichage, recalculé à chaque déplacement. Insérer, déplacer ou
+trier ne casse alors plus rien. Supprimer la cible doit produire une erreur
+visible, jamais une valeur fausse.
+
+Dans un onglet `data`, la référence sera plus lisible encore, par nom de colonne
+plutôt que par lettre : `Budget.montant` sur une ligne identifiée.
+
+### 6.3 — Grille créée au fur et à mesure
+
+Bon réflexe, et c'est ainsi que procèdent les moteurs sérieux. **Deux problèmes
+distincts** se cachent derrière cette demande, et il faut les traiter tous les
+deux :
+
+1. **Le stockage.** Ne mémoriser que les cellules réellement remplies, sous forme
+   de dictionnaire (`{"A2": …, "D17": …}`) et non de matrice. Une feuille de dix
+   cellules utiles pèse dix cellules, quelle que soit la taille apparente de la
+   grille. C'est ce que demande Yoann, et c'est acquis.
+2. **L'affichage.** Moins évident, et tout aussi décisif : une grille de dix mille
+   cellules affichées d'un coup, ce sont dix mille éléments dans la page, et un
+   navigateur à genoux. Il faut n'afficher que les cellules réellement visibles à
+   l'écran et les recycler au défilement. Sans cela, le fichier reste léger mais
+   l'application devient inutilisable.
+
+Le premier allège le fichier, le second garde l'application vivante. Les deux
+sont à prévoir.
+
+---
+
+## Point 7 — (à venir)
