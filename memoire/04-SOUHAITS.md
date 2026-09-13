@@ -469,4 +469,81 @@ le tri gratuits : on réordonne la liste, aucune cellule ne bouge.
 
 ---
 
-## Point 7 — (à venir)
+## Point 7 — L'onglet data comme micro base de données, et la balise d'appel
+
+**Dit :** « Je reviens sur la différence entre un tableau Excel et un tableau
+data, il faudra bien le notifier. Je tiens à garder ce tableau data qui permet
+d'avoir une espèce de micro base de données pure et dure. Si je dis que la
+colonne B c'est une somme, toute la colonne B ne peut être qu'une somme. On
+pourrait avoir une ligne d'en-tête directement et une ligne qu'on appelle de
+somme, obligatoire. Ce qui permet de dire dans un Word que le chiffre d'affaires
+est égal, et là on met une balise qui fait directement appel à la case de l'onglet
+data, ligne somme, colonne B. »
+
+### Reformulation, pour vérifier que j'ai bien compris
+
+Un onglet `data` n'est pas une feuille de calcul : c'est une **table**, avec une
+forme imposée qui ne se négocie pas.
+
+1. **Une ligne d'en-tête, toujours présente.** On ne peut ni la supprimer ni
+   écrire ailleurs sans passer par elle. Elle nomme les colonnes.
+2. **Chaque colonne porte un type, déclaré une fois.** Si la colonne B est
+   déclarée « montant », alors chaque cellule de la colonne B est un montant. On
+   ne peut pas y écrire du texte libre. Le type n'est pas une suggestion, c'est une
+   contrainte que le module fait respecter.
+3. **Une ligne de total, toujours présente en bas.** Elle n'est pas saisie par
+   l'utilisateur : elle est calculée. Pour une colonne de montants, elle donne la
+   somme.
+4. **Dans un onglet texte, on n'écrit pas le chiffre : on pose une balise.** On
+   tape « Le chiffre d'affaires est de », puis on insère une balise qui pointe sur
+   le total de la colonne B de l'onglet data. Le texte affiche la valeur, mais le
+   fichier ne retient que la référence. La donnée change dans le tableau, la phrase
+   se met à jour toute seule.
+
+C'est une **base de données miniature** : des colonnes typées, des contraintes
+respectées, des agrégats calculés — et un texte qui cite la donnée au lieu de la
+recopier.
+
+### Pourquoi c'est plus solide que ça n'en a l'air
+
+La ligne de total étant **structurelle**, la référence qui la vise ne porte pas
+sur une position mais sur un rôle : « le total de la colonne Montant », et non
+« la ligne 47 ». Ajouter cent lignes de données ne la déplace pas.
+
+Cela règle par construction le piège du point 6.2 : il n'y a plus rien à décaler.
+C'est la forme de référence la plus robuste du projet, et elle doit être la voie
+recommandée pour citer un chiffre dans un texte.
+
+### Ce qui reste à préciser
+
+**Le mot « somme » recouvre deux choses**, et il faut les séparer :
+
+- le **type** de la colonne : texte, nombre, **montant**, date, booléen, choix,
+  lien vers un autre onglet ;
+- l'**agrégat** affiché en bas de cette colonne : somme, moyenne, minimum,
+  maximum, nombre de valeurs, ou aucun.
+
+Une colonne « montant » proposera la somme par défaut, mais on doit pouvoir
+demander la moyenne à la place. Deux réglages distincts, pas un seul.
+
+**Question ouverte :** que fait la ligne de total sous une colonne de texte ?
+Rien, un décompte, ou la case reste vide ? À trancher.
+
+### « Il faudra bien le notifier » — comment distinguer les deux à l'écran
+
+Pour que l'utilisateur ne confonde jamais les deux types d'onglets :
+
+- **une icône et une couleur propres** à chaque type dans la barre d'onglets ;
+- **une apparence différente** : l'onglet data montre des en-têtes de colonnes
+  nommées et typées, pas des lettres A, B, C ; ses lignes sont numérotées mais ses
+  colonnes portent des noms ;
+- **le type visible dans l'en-tête de chaque colonne**, sous forme de petite
+  mention ou de pictogramme ;
+- **un refus explicite et expliqué** quand on saisit une valeur qui ne respecte
+  pas le type, plutôt qu'une acceptation silencieuse ;
+- **une aide au choix** au moment de créer l'onglet : « données structurées » ou
+  « feuille de calcul libre », avec une phrase disant à quoi sert chacune.
+
+---
+
+## Point 8 — (à venir)
