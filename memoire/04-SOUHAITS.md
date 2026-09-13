@@ -1005,4 +1005,77 @@ clairement quand la cible est un tableur.
 
 ---
 
-## Point 14 — (à venir)
+## Point 14 — Le fichier modèle en lecture seule
+
+**Dit :** « Souvent sur les projets, je dois passer dans un Word, puis un tableur,
+puis un petit truc, et je fais des allers-retours comme ça. Alors que là, on
+pourrait créer par exemple pour un utilisateur qui fait toujours à peu près les
+mêmes tâches et qui a toujours le même type de dossier, un fichier modèle en
+lecture seule : il l'ouvre et remplit les données au fur et à mesure qu'il en a
+besoin. Du coup, au lieu d'avoir quinze fichiers différents pour un projet, il a
+un seul et unique fichier. »
+
+C'est le point 13 appliqué à une manière de travailler réelle. Le problème visé
+n'est pas l'absence d'outils, c'est **le va-et-vient entre eux** : la donnée
+recopiée d'un fichier à l'autre, le chiffre corrigé ici mais pas là, la pièce
+qu'on ne retrouve plus.
+
+### Le modèle, tel que je le comprends
+
+Un **modèle** est un classeur préparé une fois, qui contient la forme d'un dossier
+sans son contenu : les onglets attendus, les colonnes typées, les formulaires de
+saisie, les textes avec leurs balises déjà posées, les mises en page.
+
+À l'ouverture, un modèle ne s'édite pas : il **engendre un dossier neuf**. On lui
+donne un nom, et l'on obtient un classeur vierge mais déjà structuré, prêt à
+recevoir les données. Le modèle reste intact pour la fois suivante.
+
+C'est la relation qu'entretiennent `.dotx` et `.docx`, ou `.xltx` et `.xlsx` —
+mais portant ici sur le dossier entier, et non sur un document isolé.
+
+### Ce qui rend ce point facile à tenir
+
+**La lecture seule est déjà acquise, par construction.** Un navigateur ne peut pas
+réécrire le fichier qu'il a ouvert : cette limite, notée comme une contrainte dans
+`01-ARCHITECTURE.md`, devient ici la fonction elle-même. Enregistrer produit
+toujours un nouveau fichier. Un modèle est donc protégé sans qu'il soit besoin
+d'aucun verrou.
+
+Il suffit d'un indicateur dans le document — `modele: true` — et d'un comportement
+distinct à l'ouverture : proposer d'emblée la création d'un dossier, et réserver
+la modification du modèle lui-même à une action explicite.
+
+### Ce qu'un modèle emporte, et ce qu'il laisse
+
+| Emporté dans le dossier neuf | Laissé de côté |
+|---|---|
+| la structure des onglets | les données saisies |
+| les colonnes typées et leurs agrégats | les lignes du dossier précédent |
+| les formulaires | les réponses déjà collectées |
+| les textes, avec leurs balises | — |
+| les mises en page et les styles | — |
+| **les données de référence** : barème, liste de communes, nomenclature | — |
+
+La dernière ligne compte : certaines données doivent survivre à la création d'un
+nouveau dossier. Il faut donc pouvoir marquer un onglet, ou une table, comme
+**donnée de référence** — conservée dans chaque dossier issu du modèle.
+
+### Usage direct, à vérifier avec Yoann
+
+Dans un service en relation avec des usagers, « le même type de dossier » se
+traduit en pratique : une instruction de demande, un dossier de subvention, une
+consultation de marché, un recensement. Un modèle par type de dossier, et chaque
+affaire tient alors dans un fichier au lieu de quinze.
+
+Est-ce bien ce que Yoann a en tête ?
+
+### Limite à connaître
+
+Un modèle qui évolue ne met pas à jour les dossiers déjà créés : ajouter une
+colonne au modèle ne l'ajoute pas aux affaires en cours. C'est inhérent au
+principe, et c'est déjà le cas avec les modèles Word. Cela doit être dit, pas
+corrigé.
+
+---
+
+## Point 15 — (à venir)
