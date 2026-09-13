@@ -588,4 +588,76 @@ colonne — par exemple somme et moyenne côte à côte — ou un seul par colon
 
 ---
 
-## Point 8 — (à venir)
+## Point 8 — L'onglet PDF sert à produire des formulaires remplissables
+
+**Dit :** « Je t'ai dit que je voulais un onglet PDF : ça permet de créer des PDF
+avec des champs remplissables. »
+
+**Ambiguïté du point 4 levée.** C'est bien la première lecture : l'onglet PDF est
+une **destination de production**, pas un lecteur de PDF importés. Mais avec une
+exigence supplémentaire que je n'avais pas envisagée : le PDF produit n'est pas
+figé, il contient des **champs interactifs** que le destinataire remplit dans son
+propre lecteur.
+
+### Ce que cela suppose techniquement
+
+Un PDF interactif repose sur un mécanisme normalisé appelé AcroForm : champs de
+texte, cases à cocher, boutons radio, listes déroulantes, et le cas échéant zone
+de signature. Il faut donc écrire nous-mêmes ce mécanisme dans le fichier PDF
+produit, depuis le navigateur, hors ligne.
+
+**Faisable**, deux voies :
+
+| Voie | Poids | Ce qu'on y gagne, ce qu'on y perd |
+|---|---|---|
+| **`pdf-lib`** (MIT) | environ 300 à 400 Ko | sait déjà tout faire, éprouvé — mais pèse presque autant que le budget total visé pour la suite |
+| **Générateur maison** | 40 à 80 Ko estimés | maîtrise du poids et du résultat — mais c'est un vrai chantier, et l'embarquement des polices en est la partie délicate |
+
+**À trancher plus tard**, en mesurant. Il n'est pas exclu de commencer avec
+`pdf-lib` pour valider l'usage, puis de le remplacer une fois le besoin réel connu.
+
+### La question des polices
+
+Pour être fidèle partout, un PDF doit embarquer ses polices. Sans cela, on se
+limite aux quatorze polices standard du format (Helvetica, Times, Courier et
+leurs variantes), qui n'ont pas besoin d'être embarquées et affichent
+correctement les accents français.
+
+Compromis proposé pour commencer : polices standard uniquement, donc PDF légers
+et compatibles partout. L'embarquement de polices viendra ensuite, quand le
+besoin typographique se fera sentir.
+
+### L'usage que ce point ouvre, et que Yoann n'a pas encore formulé
+
+Si un onglet PDF peut produire un formulaire, et qu'un onglet `data` contient des
+lignes typées, alors **un formulaire peut être pré-rempli depuis les données**.
+
+Autrement dit : quarante attestations nominatives, chacune avec ses champs déjà
+remplis et le reste laissé à compléter, produites en une fois depuis un tableau
+de quarante lignes. C'est du publipostage, mais dans un seul fichier, sans
+serveur et sans logiciel installé.
+
+C'est un usage direct pour un service en relation avec des usagers. À vérifier
+avec Yoann : est-ce bien ce qu'il a en tête, ou est-ce un usage à part ?
+
+### Question ouverte, à poser quand la liste sera close
+
+**Le retour des formulaires est-il dans le périmètre ?**
+
+Produire le formulaire est une chose. Le récupérer rempli et en dépouiller les
+réponses dans un onglet `data` en est une autre, nettement plus lourde : lire un
+PDF coûte bien plus cher que l'écrire.
+
+La boucle complète — formulaire produit, envoyé, rempli, renvoyé, dépouillé —
+aurait une valeur considérable, mais elle double au moins le chantier. Ce n'est
+pas la même ambition, et cela doit être décidé, pas subi.
+
+### À ne pas oublier
+
+Un formulaire destiné au public gagne à être accessible aux lecteurs d'écran :
+champs nommés, ordre de tabulation cohérent, langue déclarée. C'est peu coûteux
+si c'est prévu dès le départ, très coûteux à rattraper après coup.
+
+---
+
+## Point 9 — (à venir)
