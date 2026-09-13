@@ -141,4 +141,75 @@ un `.eo.html` privé de son moteur redonne exactement le `.eo`.
 
 ---
 
-## Point 3 — (à venir)
+## Point 3 — Interface calquée sur celle de Bento
+
+**Dit :** « On va partir sur une interface qui ressemble à celle que je t'ai donnée
+via le fichier modèle Bento. »
+
+**Correction préalable — erreur de ma première analyse.**
+J'avais dit que ce fichier était un modèle vierge sans contenu. Le bloc de
+données est bien vide, mais c'était une conclusion fausse en pratique : le
+runtime contient un deck de démonstration codé en dur (fonction `u2()`,
+« Bento Slides Showcase », une douzaine de diapositives) qu'il affiche quand le
+bloc est vide. Ouvert dans un navigateur, le fichier montre donc une présentation
+complète et une interface d'édition entière. Rien n'a été perdu.
+
+### Interface relevée, écran par écran
+
+Disposition en trois colonnes, thème **clair**, une seule couleur d'accent
+(corail `#FF9E8A`) sur un fond blanc cassé.
+
+**Barre supérieure**
+`logo · titre du document éditable · pastille du nom de fichier · annuler /
+rétablir · outils d'insertion (Texte, Forme, Image, Média, Tableau, Graphique,
+Commentaire) · imprimer · Partager · Enregistrer (avec menu déroulant) ·
+langue · aide`
+
+Les outils d'insertion sont au centre, en accès direct : un clic, pas un menu.
+
+**Colonne gauche — navigateur de document**
+Miniatures numérotées, rendu réel et miniaturisé du contenu (pas une icône
+générique). Entre deux miniatures apparaît une poignée `+` d'insertion au survol.
+La colonne se replie par une languette `‹`.
+
+**Centre — le canevas**
+Le document sur fond quadrillé discret. Zoom en bas à droite (`−` `71 %` `+`) et
+bouton de lancement du diaporama. Manipulation directe des éléments : sélection,
+déplacement, redimensionnement.
+
+**Colonne droite — panneau de propriétés contextuel**
+Sections repliables dépendant de la sélection : `DIAPOSITIVE` (format, fond,
+transition, masquer), `DIAPORAMA`, `INTERACTIVITÉ`, `DISPOSITION`,
+`NOTES DE L'ORATEUR` (zone de saisie libre). Se replie par une languette `›`.
+
+### Ce que je retiens pour Europa
+
+1. **Trois colonnes repliables** — navigateur à gauche, canevas au centre,
+   propriétés à droite. Cette structure vaut pour les trois modules : la colonne
+   gauche liste les diapositives, ou les pages, ou les feuilles de calcul.
+2. **Panneau de propriétés contextuel** — le contenu du panneau dépend de ce qui
+   est sélectionné. C'est ce qui évite les menus à tiroirs.
+3. **Insertion en accès direct** dans la barre supérieure, pas enfouie.
+4. **Miniatures vivantes** — un rendu réel réduit, pas une icône.
+5. **Thème clair** avec une seule couleur d'accent.
+   → Le socle actuel d'Europa est en thème **sombre** : à basculer. Prévoir les
+   deux et suivre le réglage du système.
+6. **Manipulation directe** sur le canevas, avec zoom.
+
+### Écart à traiter
+
+Bento est un éditeur de canevas libre : on pose des objets où l'on veut. Un
+traitement de texte est un flux qui se recompose, un tableur est une grille.
+La même ossature à trois colonnes les accueille tous, mais **le centre change de
+nature selon le module**. C'est le noyau qui fournit l'ossature et le panneau de
+propriétés ; chaque module fournit son centre.
+
+### Réserve
+
+Bento s'appuie sur `moveable` et `selecto` (MIT) pour la manipulation d'objets.
+Refaire cela de zéro est coûteux. À décider : reprendre ces bibliothèques, ou
+écrire notre propre couche plus légère. Ce choix pèse sur le budget de poids.
+
+---
+
+## Point 4 — (à venir)
