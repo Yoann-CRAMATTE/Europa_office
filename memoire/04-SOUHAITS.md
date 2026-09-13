@@ -660,4 +660,65 @@ si c'est prévu dès le départ, très coûteux à rattraper après coup.
 
 ---
 
-## Point 9 — (à venir)
+## Point 9 — Retour des formulaires en phase 2, et un onglet « formulaire »
+
+**Dit :** « Tu peux mettre effectivement le retour des formulaires dans un second
+temps. D'ailleurs on pourrait aussi avoir un onglet formulaire. »
+
+### 9.1 — Le dépouillement des PDF passe en phase 2
+
+**Acté.** Produire des PDF à champs remplissables reste dans le périmètre initial.
+Relire un PDF rempli pour en verser les réponses dans un onglet `data` est
+reporté. Décision prise, pas subie.
+
+### 9.2 — Un onglet formulaire — et il règle le problème du retour autrement
+
+L'idée est meilleure que son détour par le PDF, parce qu'elle reste dans la
+logique du projet : **le fichier est le véhicule**.
+
+Le mécanisme, tel que je le vois :
+
+1. On construit le formulaire dans un onglet dédié. Ses champs **dérivent des
+   colonnes d'un onglet `data`** : les types, les libellés et les contraintes sont
+   déjà là, il n'y a rien à redéfinir.
+2. On envoie le fichier au destinataire.
+3. Celui-ci l'ouvre par double-clic, voit **le formulaire seul**, le remplit, et
+   enregistre.
+4. Chaque réponse devient **une ligne de l'onglet `data`**.
+5. Il renvoie le fichier. Les réponses sont dedans.
+
+Aucun serveur, aucun envoi, aucun compte — et surtout **aucune lecture de PDF à
+écrire**. Le retour des réponses, qui coûtait cher en 8, devient presque gratuit
+ici. Les deux voies se complètent : le PDF pour qui exige un PDF, l'onglet
+formulaire pour qui veut la boucle complète.
+
+### Ce que cela impose et qui n'existe pas encore
+
+**Un mode « remplissage », distinct du mode édition.** À l'ouverture, le fichier
+doit pouvoir se présenter comme un formulaire et rien d'autre : ni barre
+d'onglets, ni éditeur, ni accès aux autres onglets. Le destinataire n'est pas
+l'auteur, il ne doit pas hériter de ses outils.
+
+**Un export réduit — et c'est un vrai point de confidentialité.** Si le classeur
+contient aussi des notes internes, un budget, d'autres réponses déjà collectées,
+envoyer le fichier entier reviendrait à tout divulguer. Il faut donc pouvoir
+produire une copie ne contenant **que** le formulaire et la structure vide de
+l'onglet `data` visé. À ne pas traiter comme une option de confort : sans cela,
+la fonction est dangereuse à l'usage.
+
+**Une fusion des retours.** Vingt destinataires renvoient vingt fichiers, chacun
+avec sa ligne. Il faut pouvoir les verser dans le classeur d'origine sans
+écraser quoi que ce soit, et sans créer de doublon si un fichier est déposé deux
+fois.
+
+### Questions ouvertes, pour plus tard
+
+- Le formulaire accepte-t-il plusieurs réponses dans un même fichier, ou une
+  seule par fichier envoyé ?
+- Le destinataire peut-il revenir sur sa réponse après enregistrement ?
+- Faut-il verrouiller le formulaire, pour qu'il ne soit pas modifiable par celui
+  qui le remplit ?
+
+---
+
+## Point 10 — (à venir)
