@@ -212,4 +212,77 @@ Refaire cela de zéro est coûteux. À décider : reprendre ces bibliothèques, 
 
 ---
 
-## Point 4 — (à venir)
+## Point 4 — Un classeur d'onglets typés, qui interagissent
+
+**Dit :** « Je veux que dans un même fichier on puisse faire un équivalent Excel,
+PDF... On pourrait très bien avoir un système comme sous Excel où on a un onglet
+qui correspond à Word, l'onglet suivant qui correspond à un PDF, l'onglet suivant
+à un PowerPoint, l'onglet suivant un deuxième Word, etc. Chaque onglet qu'on va
+créer aura une fonction. Je vois quelque chose comme un plus qui permet de créer
+un onglet, et après on lui attribue ce que c'est : Word, Excel, etc. Et donc on
+peut faire vivre dans un seul fichier plusieurs Word, Excel, PDF, etc. qui
+interagissent ensemble. »
+
+**Ce que je retiens :**
+
+Le fichier n'est pas un document, c'est un **classeur**. Une barre d'onglets en
+bas, comme les feuilles d'Excel. Un bouton `+` ajoute un onglet, et l'on choisit
+alors son type. Plusieurs onglets peuvent partager le même type : deux textes,
+trois feuilles de calcul, dans le même fichier.
+
+C'est le point le plus structurant de toute la liste. Il tranche et éclaire les
+précédents :
+
+- il **confirme le point 1** : un seul fichier porte toute la suite ;
+- il **donne sa raison d'être au point 2** : sans format commun, des onglets de
+  types différents ne peuvent pas interagir ;
+- il **annule la décision D-003** : tous les modules sont embarqués, sans
+  discussion possible.
+
+**« Qui interagissent ensemble » — c'est là qu'est la valeur.**
+
+C'est ce qu'Office fait mal : coller un tableau Excel dans Word produit une copie
+morte, ou un objet lié fragile qui casse dès que le fichier bouge. Ici tout vit
+dans le même fichier, donc un lien entre onglets ne peut pas se rompre.
+
+Ce que cela permet, concrètement :
+- une cellule d'un texte qui affiche un total calculé dans une feuille de calcul,
+  et qui se met à jour toute seule ;
+- un graphique dans une présentation nourri par un tableau d'un autre onglet ;
+- un tableau récapitulatif qui agrège plusieurs onglets ;
+- un chiffre cité dans trois onglets, corrigé une seule fois.
+
+Cela suppose un mécanisme de **référence entre onglets**, du type
+`onglet:cellule` ou `onglet:élément`, et un graphe de dépendances tenu par le
+noyau — pas par les modules. C'est la brique centrale à concevoir.
+
+**Ambiguïté à lever — que veut dire « un onglet PDF » ?**
+
+PDF n'est pas un type d'éditeur, c'est un format de sortie figé. Deux lectures :
+
+| Lecture | Ce que ça veut dire | Effort |
+|---|---|---|
+| **Onglet à destination PDF** | un document mis en page pour l'impression, exporté en PDF | moyen |
+| **PDF importé** | un PDF existant, affiché et annoté dans l'onglet | élevé — il faut embarquer un moteur de rendu PDF |
+
+Les deux sont défendables, mais ce ne sont pas les mêmes chantiers.
+→ **Question à poser à Yoann** une fois la liste terminée.
+
+**Conséquences à assumer :**
+
+1. **Le poids.** Chaque fichier porte tous les modules, même un classeur d'un seul
+   onglet. Ordre de grandeur visé, à tenir : environ 300 à 500 Ko à vide. C'est
+   dix fois moins qu'un `.docx` vide ouvert dans Word, mais cinquante fois plus
+   que le socle actuel. Cela reste tout à fait envoyable par courriel.
+2. **Le modèle de document change.** `module` au niveau racine disparaît : le
+   document devient une liste d'onglets, chacun portant son type et son contenu.
+   La refonte est à faire avant d'écrire le moindre module métier.
+3. **Le noyau grossit.** Il porte désormais la barre d'onglets, les références
+   entre onglets et le graphe de dépendances. Ce n'est plus un simple aiguilleur.
+
+**Question ouverte (plus tard) :** le mot de passe du point 1 protège-t-il le
+classeur entier, ou peut-on chiffrer un onglet en particulier ?
+
+---
+
+## Point 5 — (à venir)
