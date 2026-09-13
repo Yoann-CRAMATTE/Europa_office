@@ -430,6 +430,43 @@ deux :
 Le premier allège le fichier, le second garde l'application vivante. Les deux
 sont à prévoir.
 
+### 6.4 — Précision de Yoann sur le stockage creux
+
+**Dit :** « Imaginons que j'ai une case remplie en A1 et une autre case remplie en
+ZZ1, on ne va pas afficher toutes les cases vides dans le fichier entre les deux.
+Il faut qu'on puisse dire au fichier : il y a une donnée là, une autre donnée là.
+Ça optimise le chargement. »
+
+**Acté.** C'est bien le stockage creux décrit en 6.3, et l'exemple en donne la
+mesure : entre `A1` et `ZZ1` il y a **702 colonnes**. Une grille pleine
+enregistrerait 702 cellules pour deux valeurs utiles. Un stockage creux en
+enregistre deux. Le fichier est 351 fois plus petit sur cette ligne, et il y a
+351 fois moins de JSON à lire à l'ouverture — le gain porte donc bien sur le
+poids **et** sur le temps de chargement, comme Yoann le relève.
+
+**Point à concilier avec le 6.2.** La clé de stockage ne peut pas être `"A1"` :
+cette notation se décale dès qu'on insère une ligne ou une colonne, ce qui est
+exactement le piège écarté plus haut. La clé doit reposer sur les identifiants
+stables.
+
+Forme envisagée, qui reste lisible à l'œil nu dans le JSON :
+
+```json
+{
+  "colonnes": [{ "id": "c1", "nom": "Poste" }, { "id": "c9", "nom": "Montant" }],
+  "lignes":   [{ "id": "l1" }, { "id": "l2" }],
+  "cellules": {
+    "l1:c1": { "v": "Fournitures" },
+    "l1:c9": { "v": 1240.5 }
+  }
+}
+```
+
+Seules les cellules remplies figurent dans `cellules`. `A1` reste ce que
+l'utilisateur voit ; `l1:c1` est ce que le fichier retient. L'ordre d'affichage
+vient de l'ordre des listes `colonnes` et `lignes`, ce qui rend le déplacement et
+le tri gratuits : on réordonne la liste, aucune cellule ne bouge.
+
 ---
 
 ## Point 7 — (à venir)
