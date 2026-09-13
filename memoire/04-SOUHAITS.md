@@ -937,4 +937,72 @@ binaire, sans le tiers de poids ajouté par le base64.
 
 ---
 
-## Point 13 — (à venir)
+## Point 13 — L'intention, énoncée par Yoann
+
+**Dit :** « En gros, l'idée c'est de pouvoir faire un projet complet dans un seul
+et unique fichier, avec une seule et unique interface. Pour créer des articles par
+exemple, je crée un tableur et je crée un formulaire, et le formulaire remplit
+automatiquement le tableur. »
+
+**C'est la phrase à garder en tête pour tout le reste du projet.**
+
+> Un projet complet, dans un seul fichier, avec une seule interface.
+
+Elle donne le critère de décision pour tous les arbitrages à venir : une
+proposition qui disperse le projet sur plusieurs fichiers, ou qui oblige à
+changer d'outil, est à écarter — même si elle est techniquement plus commode.
+
+Ce que « projet » recouvre : non pas un document, mais un **dossier de travail**
+entier. Les données, les documents qui les citent, le formulaire qui les collecte,
+les pièces reçues, la présentation qui les restitue. Aujourd'hui cela vit dans
+cinq fichiers et trois logiciels, et ce qui les relie se rompt à la première
+copie.
+
+### L'exemple donné, et ce qu'il révèle
+
+Créer des articles : un tableau, un formulaire, et le formulaire alimente le
+tableau. Tout dans le même fichier.
+
+**Cet exemple décrit un usage du formulaire que nous n'avions pas encore
+distingué.** Ici, le formulaire n'est envoyé à personne : c'est un **masque de
+saisie interne**, pour l'auteur lui-même. Saisir vingt articles dans un formulaire
+confortable vaut mieux que les taper dans une grille, colonne après colonne.
+
+Deux usages du même onglet, donc, à ne pas confondre :
+
+| Usage | Qui remplit | Ce que cela demande |
+|---|---|---|
+| **Saisie interne** | l'auteur, dans son propre fichier | rien de plus qu'un formulaire lié à une table |
+| **Collecte externe** (point 9) | des destinataires, dans une copie envoyée | mode remplissage, export réduit, fusion des retours |
+
+Le premier est nettement plus simple et devrait être construit d'abord : il est
+utile immédiatement, et le second s'y ajoute ensuite sans rien remettre en cause.
+
+### Une nuance à lever
+
+Yoann dit « le formulaire remplit le tableur ». Au point 9, la cible était
+l'onglet `data`. Deux lectures possibles, et il faudra trancher :
+
+- soit « tableur » est employé au sens courant de « tableau », et la cible est
+  bien `data` ;
+- soit un formulaire doit pouvoir alimenter indifféremment un `tableur` ou un
+  `data`.
+
+Techniquement, les deux sont faisables. Mais viser `data` apporte les types, les
+contraintes et la ligne de total — donc des données fiables ; viser un `tableur`
+revient à écrire dans une grille libre, sans aucune garantie sur ce qui y entre.
+
+**Position proposée :** autoriser les deux, recommander `data`, et avertir
+clairement quand la cible est un tableur.
+
+### Ce que cet énoncé confirme
+
+- **Point 1** — un seul fichier : c'est la finalité, pas un choix technique.
+- **Point 3** — une seule interface : l'ossature ne change pas d'un onglet à
+  l'autre, seul le centre de l'écran change.
+- **Point 4** — l'interaction entre onglets n'est pas un agrément, c'est ce qui
+  fait tenir le projet ensemble.
+
+---
+
+## Point 14 — (à venir)
