@@ -544,6 +544,48 @@ Pour que l'utilisateur ne confonde jamais les deux types d'onglets :
 - **une aide au choix** au moment de créer l'onglet : « données structurées » ou
   « feuille de calcul libre », avec une phrase disant à quoi sert chacune.
 
+### 7.1 — Les types de colonne, validés par Yoann
+
+**Dit :** « Oui tu as raison pour les types de colonne, il faudra cette somme si
+c'est une date, du booléen ou autre. »
+
+**Acté :** la distinction entre le **type** d'une colonne et l'**agrégat** affiché
+en bas est retenue, et chaque type appelle ses propres agrégats. Une date ne
+s'additionne pas, un booléen non plus — mais tous deux ont un résumé qui a du sens.
+
+Ce qui répond du même coup à la question laissée ouverte au point 7 : sous une
+colonne de texte, la ligne de total affiche un **décompte**, pas une case vide.
+
+### Types à prévoir, et ce que chacun résume
+
+| Type | Contient | Agrégats possibles | Par défaut |
+|---|---|---|---|
+| **Texte** | texte libre | nombre de valeurs, nombre de valeurs distinctes, nombre de vides | nombre de valeurs |
+| **Nombre** | entier ou décimal | somme, moyenne, médiane, minimum, maximum, décompte | somme |
+| **Montant** | nombre + devise | somme, moyenne, minimum, maximum | **somme** |
+| **Pourcentage** | nombre affiché en % | moyenne, minimum, maximum | moyenne |
+| **Date** | une date | plus ancienne, plus récente, étendue en jours | étendue |
+| **Date et heure** | date + heure | idem | étendue |
+| **Durée** | une durée | somme, moyenne, minimum, maximum | somme |
+| **Booléen** | oui / non | nombre de oui, part de oui en % | nombre de oui |
+| **Choix** | une valeur d'une liste fermée | répartition par valeur, valeur la plus fréquente | répartition |
+| **Choix multiple** | plusieurs valeurs d'une liste | répartition par valeur | répartition |
+| **Lien** | renvoi vers une ligne d'un autre onglet | nombre de liens, nombre de cibles distinctes | nombre de liens |
+| **Calcul** | résultat d'une formule sur la ligne | ceux du type produit par la formule | selon le résultat |
+| **Texte contraint** | courriel, adresse web, téléphone | nombre de valeurs, nombre d'invalides | nombre de valeurs |
+
+**Deux règles qui découlent de ce tableau :**
+
+1. **L'agrégat proposé dépend du type** — on ne propose jamais « somme » sous une
+   colonne de dates. La liste offerte à l'utilisateur est filtrée par le type,
+   ce qui rend l'erreur impossible plutôt que signalée.
+2. **Chaque agrégat est citable depuis un texte.** La balise du point 7 ne vise
+   pas seulement une somme : « le chiffre d'affaires est de », mais aussi « la
+   commande la plus ancienne date du », ou « 68 % des dossiers sont traités ».
+
+**Reste à trancher plus tard :** peut-on afficher plusieurs agrégats sous une même
+colonne — par exemple somme et moyenne côte à côte — ou un seul par colonne ?
+
 ---
 
 ## Point 8 — (à venir)
