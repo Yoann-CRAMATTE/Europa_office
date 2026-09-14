@@ -1387,10 +1387,8 @@ Le mot générique reste **feuille** dans le noyau et dans le format de fichier 
 chaque module l'affiche sous son nom d'usage. L'utilisateur lit « Diapositive 3 »,
 le fichier retient une feuille.
 
-**Question laissée à Yoann :** garde-t-on ces noms simples — Texte, Tableur,
-Data, Diapos, Formulaire, PDF — ou veut-il des noms propres à Europa ?
-Mon avis : les noms simples. Ils se comprennent sans apprentissage, ce qui vaut
-mieux qu'une marque à retenir pour chaque module.
+**Tranché par Yoann le 14/09 :** « on garde ces noms, c'est clair ».
+Texte, Tableur, Data, Diapos, Formulaire, PDF. Voir la décision **D-005**.
 
 ### 19.3 — Conséquence sur le format de fichier
 

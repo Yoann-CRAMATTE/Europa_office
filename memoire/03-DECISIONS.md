@@ -33,7 +33,7 @@ C'est aussi une condition d'usage en administration.
 ---
 
 ## D-003 — Un document n'embarque que son module
-**Statut :** actée · 13/09/2026
+**Statut :** ~~actée~~ **REMPLACÉE par D-006** · 14/09/2026
 
 L'empaqueteur ne met dans un fichier que le module nécessaire à ce document.
 
@@ -43,10 +43,20 @@ L'empaqueteur ne met dans un fichier que le module nécessaire à ce document.
 ne contient que `notes` produit une erreur explicite. Un mécanisme de récupération
 reste à concevoir.
 
+*Pourquoi elle tombe :* les points 1, 4 et 11 du cahier des charges demandent
+l'inverse — un seul fichier portant toute la suite, et le regroupement primant sur
+la légèreté. Voir D-006.
+
 ---
 
 ## D-004 — Quel module métier en premier ?
-**Statut :** EN ATTENTE — décision de Yoann
+**Statut :** EN ATTENTE — à reprendre à la lumière du cahier des charges
+
+*Remarque du 14/09 :* la question posée ci-dessous précédait le recueil des
+souhaits. Le point 15 désigne désormais un cas d'essai de référence — la
+réclamation pour surconsommation — qui appelle plusieurs modules à la fois.
+L'ordre de construction est donc à redéfinir à partir de ce cas, et non du seul
+critère de l'effort.
 
 Options :
 
@@ -60,3 +70,46 @@ Options :
 *Recommandation :* **Texte**, en deux temps. D'abord un éditeur riche non paginé
 (le gros du travail utile), puis la pagination et l'impression. Le tableur ensuite,
 en réutilisant la grille pour les tableaux du module Texte.
+
+---
+
+## D-005 — Le vocabulaire du projet
+**Statut :** actée · 14/09/2026 — tranchée par Yoann
+
+**Trois niveaux :** un **classeur** est le fichier entier ; un **onglet** est un
+document d'un type donné dans ce classeur ; une **feuille** est une unité à
+l'intérieur d'un onglet.
+
+**Six modules :** Texte, Tableur, Data, Diapos, Formulaire, PDF.
+
+Le noyau et le format de fichier ne connaissent que le mot « feuille ». Chaque
+module l'affiche sous son nom d'usage : page, feuille de calcul, vue,
+diapositive, section.
+
+*Pourquoi ces noms :* ils se comprennent sans rien apprendre. Et ils évitent les
+marques déposées — Word, Excel et PowerPoint désignent les logiciels de
+quelqu'un d'autre, on ne s'en sert ni pour nommer ni pour décrire.
+
+*Portée :* interface, documentation, code, commentaires et messages d'erreur.
+Ces mots-là et pas d'autres.
+
+---
+
+## D-006 — Chaque classeur embarque toute la suite
+**Statut :** actée · 14/09/2026 — remplace D-003
+
+Un fichier Europa contient les six modules, quel que soit le nombre d'onglets
+qu'il porte.
+
+*Pourquoi :* points 1, 4 et 11 du cahier des charges. Un classeur peut recevoir
+un onglet de n'importe quel type à tout moment ; un fichier qui n'embarquerait
+que ses modules du jour deviendrait illisible dès qu'on y ajouterait autre chose.
+Et le but énoncé au point 13 est de tenir un projet entier dans un fichier, pas
+de produire des fichiers légers.
+
+*Ce qu'on accepte en échange :* des fichiers de quelques centaines de kilooctets
+à quelques mégaoctets, même pour un classeur d'un seul onglet.
+
+*Le critère qui remplace le poids :* le fichier s'ouvre-t-il en un temps
+acceptable, et se transmet-il encore par courriel ? Les budgets par module
+inscrits dans `01-ARCHITECTURE.md` sont caducs et ce document est à réviser.
