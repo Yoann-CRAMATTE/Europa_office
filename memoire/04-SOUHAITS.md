@@ -1333,4 +1333,79 @@ avant d'écrire la moindre ligne d'interface.
 
 ---
 
-## Point 19 — (à venir)
+## Point 19 — Vocabulaire, et un onglet contient plusieurs feuilles
+
+**Dit :** « Il faut juste voir que, par exemple, quand on est dans un Word — il
+faudra voir comment on appelle d'ailleurs ces différents modules — on puisse avoir
+plusieurs feuilles l'une en dessous de l'autre. Une feuille n'égale pas forcément
+un onglet pour un Word. Même chose pour une diapositive : une feuille de
+diapositive n'est pas forcément égale à un onglet. Tu peux avoir une ou plusieurs
+feuilles de diapositive. Par contre, deux diapositives différentes égalent deux
+onglets. »
+
+### 19.1 — Ce que ce point établit
+
+**L'onglet est l'unité « document », pas l'unité « feuille ».** À l'intérieur d'un
+onglet vivent autant de feuilles que nécessaire :
+
+- un onglet texte contient plusieurs **pages**, empilées l'une sous l'autre ;
+- un onglet diapos contient plusieurs **diapositives** ;
+- mais **deux présentations distinctes font deux onglets**.
+
+La colonne de gauche de la maquette allait déjà dans ce sens. Ce que Yoann ajoute
+et qui manquait : **pour le texte, les pages défilent l'une en dessous de
+l'autre**, en flux continu, avec les sauts de page visibles — et non une page
+affichée à la fois. C'est le comportement d'un traitement de texte, et la maquette
+ne le montrait pas.
+
+### 19.2 — Le vocabulaire, à arrêter maintenant
+
+On ne peut pas s'appuyer sur « Word », « Excel » ou « PowerPoint » : ce sont des
+marques déposées, et elles désignent d'autres logiciels. Il faut nos propres mots,
+et s'y tenir partout — interface, documentation, code.
+
+**Trois niveaux :**
+
+| Niveau | Terme | Ce que c'est |
+|---|---|---|
+| 1 | **Classeur** | le fichier entier, avec tout ce qu'il contient |
+| 2 | **Onglet** | un document, d'un type donné, dans ce classeur |
+| 3 | **Feuille** | une unité à l'intérieur d'un onglet |
+
+**Les six modules :**
+
+| Module | Remplace | Contient des… |
+|---|---|---|
+| **Texte** | Word | pages |
+| **Tableur** | Excel | feuilles de calcul |
+| **Data** | — | vues |
+| **Diapos** | PowerPoint | diapositives |
+| **Formulaire** | — | sections |
+| **PDF** | — | pages |
+
+Le mot générique reste **feuille** dans le noyau et dans le format de fichier ;
+chaque module l'affiche sous son nom d'usage. L'utilisateur lit « Diapositive 3 »,
+le fichier retient une feuille.
+
+**Question laissée à Yoann :** garde-t-on ces noms simples — Texte, Tableur,
+Data, Diapos, Formulaire, PDF — ou veut-il des noms propres à Europa ?
+Mon avis : les noms simples. Ils se comprennent sans apprentissage, ce qui vaut
+mieux qu'une marque à retenir pour chaque module.
+
+### 19.3 — Conséquence sur le format de fichier
+
+Le contenu d'un onglet n'est pas une liste d'éléments, mais **une liste de
+feuilles**, chacune portant ses éléments. Cela vaut pour les six modules, ce qui
+donne une structure unique :
+
+```
+classeur
+  └── onglets[]          (type, nom, couleur)
+        └── feuilles[]   (nom, format, contenu propre au module)
+```
+
+Une seule forme à écrire dans le noyau, et six affichages différents par-dessus.
+
+---
+
+## Point 20 — (à venir)

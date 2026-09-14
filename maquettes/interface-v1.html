@@ -81,6 +81,16 @@
       var(--fond)}
   .feuille{max-width:760px;margin:0 auto;background:var(--surface);border-radius:10px;
     box-shadow:var(--ombre);border-top:3px solid var(--accent);overflow:hidden}
+  /* Pile de pages : un onglet contient plusieurs feuilles, l'une sous l'autre. */
+  .pile{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+  .pile .feuille{margin:0}
+  .saut{display:flex;align-items:center;gap:10px;padding:9px 4px;
+    font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--texte-faible)}
+  .saut:before,.saut:after{content:"";flex:1;height:1px;
+    background:repeating-linear-gradient(90deg,var(--bord-fort) 0 5px,transparent 5px 10px)}
+  .num-feuille{position:absolute;top:9px;right:13px;font-size:10px;color:var(--texte-faible);
+    letter-spacing:.04em}
+  .feuille{position:relative}
 
   .volet{background:var(--surface);border-left:1px solid var(--bord);width:224px;flex:none;
     display:flex;flex-direction:column;min-height:0}
@@ -334,11 +344,12 @@ const RUBANS = {
   ]
 }
 
+/* Une feuille dans le noyau, un nom d'usage par module (point 19.2). */
 const COLONNE = {
   texte:      ['Pages',        ['Page 1','Page 2']],
   tableur:    ['Feuilles',     ['Calcul','Historique']],
   data:       ['Vues',         ['Toutes les lignes','Année en cours']],
-  diapos:     ['Diapositives', ['Contexte','Constat','Décision']],
+  diapos:     ['Diapositives', ['Réclamations 2026','576 m³','Décision']],
   formulaire: ['Sections',     ['Usager','Réclamation']],
   pdf:        ['Pages',        ['Page 1','Page 2','Page 3']]
 }
@@ -356,13 +367,21 @@ const VOLETS = {
 function scene(t){
   if(t==='texte') return `
     <div class="avis">${jeton('data',15)}<div><b>Les parties colorées sont des balises</b> — elles citent une donnée d'un autre onglet. Corrigez le relevé, la phrase suit.</div></div>
-    <div class="feuille"><div class="doc-texte">
-      <h1>Réponse à réclamation — surconsommation</h1>
-      <p>Madame, Monsieur <span class="balise">Dossier.nom</span>,</p>
-      <p>Vous nous avez saisis le <span class="balise">Dossier.date</span> au sujet de votre abonnement n° <span class="balise">Dossier.abonné</span>.</p>
-      <p>Le relevé du compteur fait apparaître une consommation de <span class="balise">Relevés.total</span> m³, à comparer à votre moyenne des trois années précédentes, soit <span class="balise">Analyse.moyenne</span> m³. L'écart constaté s'établit à <span class="balise">Analyse.écart</span> %.</p>
-      <p>En conséquence, et au vu de l'attestation de réparation que vous nous avez transmise, un dégrèvement de <span class="balise">Analyse.dégrèvement</span> € vous est accordé.</p>
-    </div></div>`
+    <div class="pile">
+      <div class="feuille"><span class="num-feuille">Page 1</span><div class="doc-texte">
+        <h1>Réponse à réclamation — surconsommation</h1>
+        <p>Madame, Monsieur <span class="balise">Dossier.nom</span>,</p>
+        <p>Vous nous avez saisis le <span class="balise">Dossier.date</span> au sujet de votre abonnement n° <span class="balise">Dossier.abonné</span>.</p>
+        <p>Le relevé du compteur fait apparaître une consommation de <span class="balise">Relevés.total</span> m³, à comparer à votre moyenne des trois années précédentes, soit <span class="balise">Analyse.moyenne</span> m³. L'écart constaté s'établit à <span class="balise">Analyse.écart</span> %.</p>
+        <p>En conséquence, et au vu de l'attestation de réparation que vous nous avez transmise, un dégrèvement de <span class="balise">Analyse.dégrèvement</span> € vous est accordé.</p>
+      </div></div>
+      <div class="saut">saut de page</div>
+      <div class="feuille"><span class="num-feuille">Page 2</span><div class="doc-texte">
+        <p>Ce dégrèvement sera porté au crédit de votre prochaine facture, éditée le <span class="balise">Analyse.prochaine_facture</span>.</p>
+        <p>Nous vous rappelons qu'il vous appartient de surveiller votre consommation et de signaler sans délai toute anomalie.</p>
+        <p style="margin-top:38px">Le responsable du service relations aux usagers</p>
+      </div></div>
+    </div>`
 
   if(t==='data') return `
     <div class="avis">${jeton('data',15)}<div><b>Colonnes typées, ligne de total structurelle.</b> C'est elle que vise la balise du courrier — ajouter des lignes ne la déplace pas.</div></div>
@@ -411,11 +430,19 @@ function scene(t){
     </div></div>`
 
   if(t==='diapos') return `
-    <div class="feuille"><div class="diapo"><h2>Réclamations 2026</h2><p>Bilan trimestriel — service relations usagers</p></div></div>`
+    <div class="avis">${jeton('diapos',15)}<div><b>Un onglet, plusieurs diapositives.</b> Deux présentations distinctes feraient deux onglets.</div></div>
+    <div class="pile">
+      <div class="feuille"><span class="num-feuille">Diapositive 1</span>
+        <div class="diapo"><h2>Réclamations 2026</h2><p>Bilan trimestriel — service relations usagers</p></div></div>
+      <div class="saut">diapositive suivante</div>
+      <div class="feuille"><span class="num-feuille">Diapositive 2</span>
+        <div class="diapo" style="background:#1E3350"><h2>576 m³</h2><p>Consommation constatée, contre 171 m³ en moyenne</p></div></div>
+    </div>`
 
   return `
     <div class="avis">${jeton('pdf',15)}<div><b>Surimpression.</b> Le PDF reçu n'est pas modifié : on écrit par-dessus, et l'export fusionne les deux.</div></div>
-    <div class="feuille"><div class="pdf-page">
+    <div class="pile">
+    <div class="feuille"><span class="num-feuille">Page 1 sur 3</span><div class="pdf-page">
       <div style="color:#888;font-size:11px;margin-bottom:14px">ATTESTATION DE RÉPARATION — page 1 sur 3</div>
       <p>Je soussigné, plombier, atteste avoir procédé à la réparation d'une fuite sur canalisation après compteur, au domicile de l'abonné désigné ci-dessus.</p>
       <p style="color:#999">Date d'intervention : ....................................</p>
@@ -423,7 +450,14 @@ function scene(t){
       <div class="surcouche" style="top:128px;left:180px">28/08/2026</div>
       <div class="surcouche" style="top:176px;left:170px">Canalisation enterrée</div>
       <div class="surcouche" style="bottom:32px;right:34px">REÇU LE 04/09/2026</div>
-    </div></div>`
+    </div></div>
+    <div class="saut">page suivante</div>
+    <div class="feuille"><span class="num-feuille">Page 2 sur 3</span><div class="pdf-page">
+      <div style="color:#888;font-size:11px;margin-bottom:14px">ATTESTATION DE RÉPARATION — page 2 sur 3</div>
+      <p>Détail des travaux réalisés et des pièces remplacées.</p>
+      <p style="color:#999">Montant des travaux : ....................................</p>
+    </div></div>
+    </div>`
 }
 
 let actif = 'releves'
@@ -461,7 +495,7 @@ function rendre(){
     }).join('') +
     `<button class="plus" id="plus" title="Ajouter un onglet">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 3.5v9M3.5 8h9"/></svg></button>
-    <div class="pied-fin"><span>7 onglets</span><span>·</span><span>Non chiffré</span></div>`
+    <div class="pied-fin"><span>Classeur · 7 onglets</span><span>·</span><span>Non chiffré</span></div>`
 
   document.querySelectorAll('.onglet').forEach(b=>
     b.onclick = ()=>{ actif = b.dataset.id; rendre() })

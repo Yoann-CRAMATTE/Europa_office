@@ -4,6 +4,29 @@ Ordre antichronologique. Une entrée par instruction traitée.
 
 ---
 
+## 14/09/2026 — Vocabulaire arrêté, feuilles empilées dans la maquette
+
+**Demande :** un onglet doit pouvoir contenir plusieurs feuilles, affichées l'une
+sous l'autre pour le texte ; et fixer le nom des modules.
+
+**Vocabulaire arrêté** (point 19.2) : **classeur** pour le fichier entier,
+**onglet** pour un document, **feuille** pour une unité à l'intérieur. Les six
+modules s'appellent Texte, Tableur, Data, Diapos, Formulaire et PDF. Le noyau ne
+connaît que le mot « feuille » ; chaque module l'affiche sous son nom d'usage —
+page, feuille de calcul, vue, diapositive, section.
+
+**Maquette corrigée :**
+- le module Texte empile désormais ses pages en flux continu, séparées par un
+  repère de saut de page — c'est ce qui manquait ;
+- le module Diapos montre plusieurs diapositives dans le même onglet ;
+- le module PDF montre plusieurs pages ;
+- chaque feuille porte son numéro, la barre du bas dit « Classeur · 7 onglets ».
+
+**Vérifié dans Chromium :** deux pages empilées et un saut de page dans Texte,
+deux diapositives dans Diapos, aucune erreur console.
+
+---
+
 ## 13/09/2026 — Première maquette d'interface
 
 **Demande :** voir un premier jet visuel, même sans rien de connecté.
