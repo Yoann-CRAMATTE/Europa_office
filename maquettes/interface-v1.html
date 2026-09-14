@@ -43,6 +43,31 @@
   /* ---------- ruban ---------- */
   .ruban{display:flex;align-items:stretch;gap:0;padding:0 10px;height:92px;
     background:var(--surface);border-bottom:1px solid var(--bord);flex:none;overflow-x:auto}
+  /* Première case du ruban : rappelle en permanence le type de l'onglet actif. */
+  .identite{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    width:82px;flex:none;padding:8px 6px;border-right:1px solid var(--bord);
+    background:color-mix(in srgb,var(--accent) 8%,transparent);color:var(--accent)}
+  .identite .nom{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:640}
+  .identite .jeton{opacity:.95}
+
+  /* Contrôles du ruban : listes et bascules, à côté des boutons-icônes. */
+  .ctrl-rang{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+  .ctrl-rang:last-child{margin-bottom:0}
+  .ctrl-liste{display:flex;align-items:center;justify-content:space-between;gap:7px;height:25px;
+    padding:0 8px;border:1px solid var(--bord);border-radius:5px;background:var(--surface);
+    font-size:11.5px;color:var(--texte)}
+  .ctrl-liste:hover{border-color:var(--bord-fort)}
+  .ctrl-liste svg{color:var(--texte-faible);flex:none}
+  .bascule{display:grid;place-content:center;width:25px;height:25px;border-radius:5px;
+    border:1px solid transparent;color:var(--texte-doux);font-size:12.5px}
+  .bascule:hover{background:var(--fond);color:var(--texte)}
+  .bascule.on{background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);
+    border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
+  .bascule b{font-weight:750}
+  .bascule i{font-style:italic;font-family:Georgia,serif}
+  .bascule u{text-decoration:underline;text-underline-offset:2px}
+  .pastille-surlig{width:13px;height:3px;border-radius:2px;background:#F5D547;margin-top:2px}
+
   .groupe{display:flex;flex-direction:column;justify-content:space-between;
     padding:7px 14px 4px;border-right:1px solid var(--bord);flex:none}
   .groupe:last-child{border-right:0}
@@ -311,12 +336,24 @@ const ONGLETS = [
 const RUBANS = {
   texte:[
     ['Presse-papiers',[['coller','Coller'],['copier','Copier']]],
-    ['Style',[['titre','Titre'],['corps','Corps'],['liste','Liste']]],
+    ['Police',[['@rangs',[
+      [['liste','Inter',104],['liste','11',44]],
+      [['bascule','<b>G</b>',true,'Gras'],['bascule','<i>I</i>',false,'Italique'],
+       ['bascule','<u>S</u>',false,'Souligné'],
+       ['bascule','A<span class="pastille-surlig"></span>',false,'Surlignage'],
+       ['liste','Corps',82]]
+    ]]]],
+    ['Paragraphe',[['titre','Titre'],['liste','Liste'],['corps','Alignement']]],
     ['Insérer',[['balise','Balise'],['tableur','Tableau'],['image','Image'],['champ','Zone à remplir']]],
     ['Mise en page',[['marges','Marges'],['colonnes','Colonnes'],['apercu','Aperçu']]]
   ],
   tableur:[
     ['Presse-papiers',[['coller','Coller'],['copier','Copier']]],
+    ['Police',[['@rangs',[
+      [['liste','Inter',104],['liste','11',44]],
+      [['bascule','<b>G</b>',false,'Gras'],['bascule','<i>I</i>',false,'Italique'],
+       ['bascule','<u>S</u>',false,'Souligné'],['liste','Nombre',84]]
+    ]]]],
     ['Cellules',[['format','Format'],['fusion','Fusionner'],['bordure','Bordures']]],
     ['Calcul',[['formule','Formule'],['balise','Référence'],['somme','Somme']]],
     ['Données',[['trier','Trier'],['filtrer','Filtrer'],['importer','Importer CSV']]]
@@ -467,10 +504,25 @@ function rendre(){
   const t = TYPES[o.type]
   document.documentElement.style.setProperty('--accent', t.couleur)
 
-  document.getElementById('ruban').innerHTML = RUBANS[o.type].map(([nom,outils])=>
-    `<div class="groupe"><div class="groupe-outils">${
-      outils.map((u,i)=>`<button class="outil${i===0?' actif':''}">${jeton(u[0],19,1.4)}<span>${u[1]}</span></button>`).join('')
-    }</div><div class="groupe-nom">${nom}</div></div>`).join('')
+  const chevron = '<svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5l4 4 4-4"/></svg>'
+
+  const rendreGroupe = (nom, contenu) => {
+    // Un groupe porte soit des boutons-icônes, soit des rangs de contrôles.
+    const corps = Array.isArray(contenu[0]) && contenu[0][0] === '@rangs'
+      ? `<div>${contenu[0][1].map(rang=>
+          `<div class="ctrl-rang">${rang.map(c=>
+            c[0]==='liste'
+              ? `<button class="ctrl-liste" style="width:${c[2]}px">${c[1]}${chevron}</button>`
+              : `<button class="bascule${c[2]?' on':''}" title="${c[3]??c[1]}">${c[1]}</button>`
+          ).join('')}</div>`).join('')}</div>`
+      : `<div class="groupe-outils">${contenu.map((u,i)=>
+          `<button class="outil${i===0?' actif':''}">${jeton(u[0],19,1.4)}<span>${u[1]}</span></button>`).join('')}</div>`
+    return `<div class="groupe">${corps}<div class="groupe-nom">${nom}</div></div>`
+  }
+
+  document.getElementById('ruban').innerHTML =
+    `<div class="identite" title="Type de cet onglet">${jeton(o.type,25,1.45)}<span class="nom">${t.nom}</span></div>` +
+    RUBANS[o.type].map(([nom,contenu])=>rendreGroupe(nom,contenu)).join('')
 
   const [titre,items] = COLONNE[o.type]
   document.getElementById('colonne-titre').textContent = titre
