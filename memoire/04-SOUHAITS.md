@@ -1470,12 +1470,45 @@ et c'est le seul qui évite de tout recasser en changeant un réglage général.
    → **Position proposée :** l'autoriser, mais le signaler — une mention discrète
    quand une présentation mélange les formats, sans l'interdire.
 
-### Une question ouverte
+### 20.1 — Étendu au Tableur et au Data
 
-Ce réglage par feuille vaut-il aussi pour l'export des onglets Tableur et Data,
-qui ont eux aussi besoin d'un format et d'une orientation à l'impression — un
-grand tableau tenant mieux en paysage ? Le besoin n'y est pas formulé, mais il
-existe. À confirmer avec Yoann.
+**Confirmé par Yoann le 14/09 : « oui pour tableur et data aussi ».**
+
+Les quatre modules portent donc un format et une orientation. Mais **pas de la
+même manière**, et la nuance compte :
+
+| Modules | Ce qu'est la feuille | Ce que règle le format |
+|---|---|---|
+| Texte, Diapos | une page, une diapositive | **la feuille elle-même** — ce qu'on voit à l'écran est ce qui sortira |
+| Tableur, Data | une grille continue | **le découpage à l'impression** — la grille n'a pas de pages, elles sont calculées |
+
+Une feuille de calcul ne s'arrête nulle part : les pages n'apparaissent qu'au
+moment d'imprimer ou d'exporter. Le réglage se pose donc sur la feuille, et le
+découpage en découle.
+
+**Réglages propres à Tableur et Data :**
+
+| Réglage | À quoi ça sert |
+|---|---|
+| Format et orientation | A4 paysage pour un tableau large |
+| Zone d'impression | n'imprimer qu'une partie de la grille |
+| Répéter l'en-tête | la ligne de titres revient en haut de chaque page |
+| Ajuster à la largeur | tout tenir sur une page de large, la hauteur suivant |
+| Échelle | réduction en pourcentage |
+| Quadrillage | imprimer les traits de la grille, ou non |
+| Ordre de découpage | vers le bas puis à droite, ou l'inverse |
+| Sauts de page manuels | forcer une coupure, et la voir à l'écran |
+
+**Pour l'onglet Data,** la ligne de total pose une question propre : revient-elle
+en bas de chaque page imprimée, ou seulement à la toute fin ? Les deux se
+défendent — un sous-total par page pour un tableau de contrôle, un total unique
+pour un document de synthèse. **À régler par l'utilisateur**, avec le total unique
+en fin de document comme choix par défaut.
+
+**À prévoir dans l'interface :** un aperçu des coupures directement sur la grille,
+en traits discrets, pour qu'on voie où les pages vont tomber sans passer par un
+aperçu avant impression. C'est ce qui manque le plus cruellement dans les
+tableurs existants.
 
 ---
 
