@@ -1406,4 +1406,77 @@ Une seule forme à écrire dans le noyau, et six affichages différents par-dess
 
 ---
 
-## Point 20 — (à venir)
+## Point 20 — Format et orientation réglables feuille par feuille
+
+**Dit :** « Dans Texte et Diapos, je veux pouvoir contrôler le format,
+l'orientation, etc. à chaque page. »
+
+**Ce que cela établit :** le format et l'orientation sont des propriétés **de la
+feuille**, pas de l'onglet. Dans un même onglet Texte, la page 1 peut être en A4
+portrait et la page 2 en A3 paysage.
+
+C'est un besoin courant et mal servi ailleurs : glisser un tableau large ou un
+plan au milieu d'un rapport oblige, dans les traitements de texte existants, à
+passer par des sauts de section — un mécanisme que presque personne ne maîtrise
+et qui casse la mise en page au premier remaniement. Ici, c'est un réglage de la
+page, visible dans le panneau de droite quand elle est sélectionnée.
+
+### Ce qui se règle, par feuille
+
+**Onglet Texte**
+
+| Réglage | Valeurs |
+|---|---|
+| Format | A4, A5, A3, Letter, Legal, personnalisé |
+| Orientation | portrait, paysage |
+| Marges | haut, bas, gauche, droite — et reliure |
+| En-tête et pied de page | présents ou non, hauteur |
+| Colonnes | une ou plusieurs |
+
+**Onglet Diapos**
+
+| Réglage | Valeurs |
+|---|---|
+| Format | 16:9, 16:10, 4:3, A4 pour support imprimé, personnalisé |
+| Orientation | paysage, portrait |
+| Fond | couleur ou image |
+
+### Héritage : régler une fois, surcharger au besoin
+
+Le format ne doit pas être à ressaisir à chaque nouvelle page. L'onglet porte un
+réglage par défaut, dont chaque feuille hérite ; une feuille peut s'en écarter, et
+elle est alors marquée comme telle dans la colonne de gauche.
+
+Changer le défaut de l'onglet met à jour toutes les feuilles qui en héritent, et
+laisse intactes celles qui ont été réglées à part. C'est le comportement attendu,
+et c'est le seul qui évite de tout recasser en changeant un réglage général.
+
+### Trois conséquences à traiter
+
+1. **L'affichage en flux continu.** Le point 19 empile les pages les unes sous les
+   autres. Des pages de largeurs différentes doivent rester lisibles : chacune est
+   centrée sur sa propre largeur, et le repère de saut de page signale le
+   changement de format.
+
+2. **L'export PDF.** Un même document PDF peut contenir des pages de tailles
+   différentes — chaque page y porte ses propres dimensions. Aucune difficulté
+   technique donc, mais le générateur doit lire le format feuille par feuille, et
+   non une fois pour tout le document.
+
+3. **La projection d'un diaporama mixte.** Un écran a un rapport fixe. Des
+   diapositives de formats différents dans une même présentation s'affichent alors
+   avec des bandes, ou recadrées. C'est utile pour un support imprimé, gênant en
+   projection.
+   → **Position proposée :** l'autoriser, mais le signaler — une mention discrète
+   quand une présentation mélange les formats, sans l'interdire.
+
+### Une question ouverte
+
+Ce réglage par feuille vaut-il aussi pour l'export des onglets Tableur et Data,
+qui ont eux aussi besoin d'un format et d'une orientation à l'impression — un
+grand tableau tenant mieux en paysage ? Le besoin n'y est pas formulé, mais il
+existe. À confirmer avec Yoann.
+
+---
+
+## Point 21 — (à venir)
