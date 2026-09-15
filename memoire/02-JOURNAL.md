@@ -4,6 +4,32 @@ Ordre antichronologique. Une entrée par instruction traitée.
 
 ---
 
+## 15/09/2026 — Identité visuelle vérifiée par un test
+
+**Demande :** vérifier que dans chaque module le logo figure non seulement dans
+l'onglet en bas, mais aussi dans la barre de fonctions.
+
+**Fait :** `tests/identite-visuelle.mjs`, ajouté à `npm test`. Il ne se contente
+pas de constater une présence : il compare les **tracés SVG** entre la case du
+ruban, l'onglet en bas et le menu de création, et refuse qu'ils diffèrent.
+
+Quatre contrôles par onglet, plus un sur le menu :
+1. la case d'identité existe dans le ruban et porte le nom du module ;
+2. le tracé du logo y est identique à celui de l'onglet en bas ;
+3. la couleur du ruban suit celle de l'onglet ;
+4. un module garde le même logo d'un onglet à l'autre, et diffère de tous les
+   autres ;
+5. le menu de création reprend les six mêmes logos.
+
+**Résultat : les six modules passent.** Sept onglets contrôlés.
+
+**Corrigé en cours de route :** la première version du test se trompait
+elle-même — un classeur peut contenir plusieurs onglets d'un même type, ici deux
+onglets Data, et la déduplication comparait alors Data contre lui-même. Le test
+distingue désormais la constance d'un module et sa distinction d'avec les autres.
+
+---
+
 ## 14/09/2026 — Vocabulaire arrêté, feuilles empilées dans la maquette
 
 **Demande :** un onglet doit pouvoir contenir plusieurs feuilles, affichées l'une

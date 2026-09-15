@@ -12,8 +12,9 @@
     "build:noyau": "esbuild noyau/src/index.ts --bundle --format=esm --minify --outfile=dist/noyau.js",
     "pack": "node outils/empaqueter.mjs",
     "demo": "npm run build:noyau && node outils/empaqueter.mjs --runtime dist/noyau.js --css noyau/src/base.css --sortie dist/demo.europa.html --titre \"Note de démonstration\" --module notes",
-    "test": "npm run demo && node tests/fumee.mjs && node tests/chiffrement.mjs && node tests/module-absent.mjs",
-    "verifier": "npx tsc --noEmit && npm test"
+    "test": "npm run demo && node tests/fumee.mjs && node tests/chiffrement.mjs && node tests/module-absent.mjs && node tests/identite-visuelle.mjs",
+    "verifier": "npx tsc --noEmit && npm test",
+    "test:maquette": "node tests/identite-visuelle.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",
